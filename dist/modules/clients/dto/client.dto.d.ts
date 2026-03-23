@@ -7,9 +7,9 @@ export declare class CreateClientDto {
     inquiry_type?: InquiryType;
     notes?: string;
     source?: string;
+    status?: ClientStatus;
 }
 declare const UpdateClientDto_base: import("@nestjs/mapped-types").MappedType<Partial<CreateClientDto>>;
 export declare class UpdateClientDto extends UpdateClientDto_base {
-    status?: ClientStatus;
 }
 export {};

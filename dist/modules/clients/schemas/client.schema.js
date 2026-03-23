@@ -11,19 +11,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClientSchema = exports.Client = exports.ClientStatus = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
+const client_entity_1 = require("../entities/client.entity");
 var ClientStatus;
 (function (ClientStatus) {
     ClientStatus["NEW"] = "New";
-    ClientStatus["IN_PROGRESS"] = "In Progress";
+    ClientStatus["IN_PROGRESS"] = "In-Progress";
     ClientStatus["COMPLETED"] = "Completed";
     ClientStatus["CANCELLED"] = "Cancelled";
 })(ClientStatus || (exports.ClientStatus = ClientStatus = {}));
 let Client = class Client {
     full_name;
     email;
-    phone;
-    service_requested;
+    phone_number;
+    inquiry_type;
     status;
+    source;
     notes;
     last_contacted_at;
 };
@@ -37,17 +39,21 @@ __decorate([
     __metadata("design:type", String)
 ], Client.prototype, "email", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: true }),
+    (0, mongoose_1.Prop)({ required: false }),
     __metadata("design:type", String)
-], Client.prototype, "phone", void 0);
+], Client.prototype, "phone_number", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ nullable: true }),
+    (0, mongoose_1.Prop)({ type: String, enum: client_entity_1.InquiryType, default: client_entity_1.InquiryType.GENERAL }),
     __metadata("design:type", String)
-], Client.prototype, "service_requested", void 0);
+], Client.prototype, "inquiry_type", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ type: String, enum: ClientStatus, default: ClientStatus.NEW }),
     __metadata("design:type", String)
 ], Client.prototype, "status", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: String, nullable: true }),
+    __metadata("design:type", String)
+], Client.prototype, "source", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ type: String, nullable: true }),
     __metadata("design:type", String)

@@ -30,6 +30,7 @@ let ClientsService = class ClientsService {
             query.$or = [
                 { full_name: { $regex: search, $options: 'i' } },
                 { email: { $regex: search, $options: 'i' } },
+                { phone_number: { $regex: search, $options: 'i' } },
             ];
         }
         if (status) {

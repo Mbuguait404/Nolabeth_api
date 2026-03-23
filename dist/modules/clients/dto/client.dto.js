@@ -22,8 +22,9 @@ class CreateClientDto {
     inquiry_type;
     notes;
     source;
+    status;
     static _OPENAPI_METADATA_FACTORY() {
-        return { full_name: { required: true, type: () => String }, email: { required: true, type: () => String, format: "email" }, phone_number: { required: false, type: () => String }, inquiry_type: { required: false, enum: require("../entities/client.entity").InquiryType }, notes: { required: false, type: () => String }, source: { required: false, type: () => String } };
+        return { full_name: { required: true, type: () => String }, email: { required: true, type: () => String, format: "email" }, phone_number: { required: false, type: () => String }, inquiry_type: { required: false, enum: require("../entities/client.entity").InquiryType }, notes: { required: false, type: () => String }, source: { required: false, type: () => String }, status: { required: false, enum: require("../schemas/client.schema").ClientStatus } };
     }
 }
 exports.CreateClientDto = CreateClientDto;
@@ -55,16 +56,15 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateClientDto.prototype, "source", void 0);
-class UpdateClientDto extends (0, mapped_types_1.PartialType)(CreateClientDto) {
-    status;
-    static _OPENAPI_METADATA_FACTORY() {
-        return { status: { required: false, enum: require("../schemas/client.schema").ClientStatus } };
-    }
-}
-exports.UpdateClientDto = UpdateClientDto;
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsEnum)(client_schema_1.ClientStatus),
     __metadata("design:type", String)
-], UpdateClientDto.prototype, "status", void 0);
+], CreateClientDto.prototype, "status", void 0);
+class UpdateClientDto extends (0, mapped_types_1.PartialType)(CreateClientDto) {
+    static _OPENAPI_METADATA_FACTORY() {
+        return {};
+    }
+}
+exports.UpdateClientDto = UpdateClientDto;
 //# sourceMappingURL=client.dto.js.map

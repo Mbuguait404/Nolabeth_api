@@ -25,10 +25,10 @@ export class CreateClientDto {
   @IsOptional()
   @IsString()
   source?: string;
-}
 
-export class UpdateClientDto extends PartialType(CreateClientDto) {
   @IsOptional()
   @IsEnum(ClientStatus)
   status?: ClientStatus;
 }
+
+export class UpdateClientDto extends PartialType(CreateClientDto) {}
