@@ -23,6 +23,7 @@ const blogs_module_1 = require("./modules/blogs/blogs.module");
 const resources_module_1 = require("./modules/resources/resources.module");
 const products_module_1 = require("./modules/products/products.module");
 const services_module_1 = require("./modules/services/services.module");
+const settings_module_1 = require("./modules/settings/settings.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -49,6 +50,7 @@ exports.AppModule = AppModule = __decorate([
             resources_module_1.ResourcesModule,
             products_module_1.ProductsModule,
             services_module_1.ServicesModule,
+            settings_module_1.SettingsModule,
         ],
     })
 ], AppModule);
