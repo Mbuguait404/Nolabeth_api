@@ -14,6 +14,7 @@ const openapi = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 const mapped_types_1 = require("@nestjs/mapped-types");
 const client_entity_1 = require("../entities/client.entity");
+const client_schema_1 = require("../schemas/client.schema");
 class CreateClientDto {
     full_name;
     email;
@@ -57,13 +58,13 @@ __decorate([
 class UpdateClientDto extends (0, mapped_types_1.PartialType)(CreateClientDto) {
     status;
     static _OPENAPI_METADATA_FACTORY() {
-        return { status: { required: false, enum: require("../entities/client.entity").ClientStatus } };
+        return { status: { required: false, enum: require("../schemas/client.schema").ClientStatus } };
     }
 }
 exports.UpdateClientDto = UpdateClientDto;
 __decorate([
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsEnum)(client_entity_1.ClientStatus),
+    (0, class_validator_1.IsEnum)(client_schema_1.ClientStatus),
     __metadata("design:type", String)
 ], UpdateClientDto.prototype, "status", void 0);
 //# sourceMappingURL=client.dto.js.map

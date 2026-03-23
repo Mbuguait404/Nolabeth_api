@@ -1,77 +1,77 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, ILike } from 'typeorm';
-import { BlogPost } from './entities/blog-post.entity';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { BlogPost, BlogPostDocument } from './schemas/blog-post.schema';
 import { CreateBlogPostDto, UpdateBlogPostDto } from './dto/blog-post.dto';
 import { PaginationDto } from '../../common/dto/pagination.dto';
 
 @Injectable()
 export class BlogsService {
   constructor(
-    @InjectRepository(BlogPost)
-    private blogsRepo: Repository<BlogPost>,
+    @InjectModel(BlogPost.name)
+    private blogModel: Model<BlogPostDocument>,
   ) {}
 
   async findAll(pagination: PaginationDto & { category?: string }) {
     const { page = 1, limit = 20, search, category } = pagination;
+    const skip = (page - 1) * limit;
 
-    const qb = this.blogsRepo.createQueryBuilder('post');
-
+    const query: any = {};
     if (search) {
-      qb.where('post.title ILIKE :search OR post.excerpt ILIKE :search', {
-        search: `%${search}%`,
-      });
+      query.$or = [
+        { title: { $regex: search, $options: 'i' } },
+        { excerpt: { $regex: search, $options: 'i' } },
+      ];
     }
-
     if (category) {
-      qb.andWhere('post.category = :category', { category });
+      query.category = category;
     }
 
-    qb.orderBy('post.created_at', 'DESC')
-      .skip((page - 1) * limit)
-      .take(limit);
+    const [data, total] = await Promise.all([
+      this.blogModel.find(query).sort({ created_at: -1 }).skip(skip).limit(limit).exec(),
+      this.blogModel.countDocuments(query).exec(),
+    ]);
 
-    const [data, total] = await qb.getManyAndCount();
     return { data, total, page, limit, pages: Math.ceil(total / limit) };
   }
 
   async findOne(id: string) {
-    const post = await this.blogsRepo.findOne({ where: { id } });
+    const post = await this.blogModel.findById(id).exec();
     if (!post) throw new NotFoundException(`Blog post #${id} not found`);
     return post;
   }
 
   async findBySlug(slug: string) {
-    const post = await this.blogsRepo.findOne({ where: { slug } });
+    const post = await this.blogModel.findOne({ slug }).exec();
     if (!post) throw new NotFoundException(`Blog post with slug "${slug}" not found`);
     return post;
   }
 
   async create(dto: CreateBlogPostDto) {
     if (dto.slug) {
-      const exists = await this.blogsRepo.findOne({ where: { slug: dto.slug } });
+      const exists = await this.blogModel.findOne({ slug: dto.slug }).exec();
       if (exists) throw new ConflictException(`Slug "${dto.slug}" already in use`);
     }
-    const post = this.blogsRepo.create(dto);
-    return this.blogsRepo.save(post);
+    const post = new this.blogModel(dto);
+    return post.save();
   }
 
   async update(id: string, dto: UpdateBlogPostDto) {
-    await this.findOne(id);
-    await this.blogsRepo.update(id, dto);
-    return this.findOne(id);
+    const post = await this.blogModel.findByIdAndUpdate(id, dto, { new: true }).exec();
+    if (!post) throw new NotFoundException(`Blog post #${id} not found`);
+    return post;
   }
 
   async remove(id: string) {
-    await this.findOne(id);
-    await this.blogsRepo.delete(id);
+    const result = await this.blogModel.findByIdAndDelete(id).exec();
+    if (!result) throw new NotFoundException(`Blog post #${id} not found`);
     return { message: 'Blog post deleted successfully' };
   }
 
   async getStats() {
-    const total = await this.blogsRepo.count();
-    const published = await this.blogsRepo.count({ where: { is_published: true } });
-    const featured = await this.blogsRepo.count({ where: { is_featured: true } });
+    const total = await this.blogModel.countDocuments().exec();
+    const published = await this.blogModel.countDocuments({ is_published: true }).exec();
+    const featured = await this.blogModel.countDocuments({ is_featured: true }).exec();
     return { total, published, drafts: total - published, featured };
   }
 }

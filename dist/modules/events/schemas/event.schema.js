@@ -103,7 +103,10 @@ __decorate([
     __metadata("design:type", Number)
 ], MyEvent.prototype, "registrations_count", void 0);
 exports.MyEvent = MyEvent = __decorate([
-    (0, mongoose_1.Schema)({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } })
+    (0, mongoose_1.Schema)({
+        timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
+        collection: 'events'
+    })
 ], MyEvent);
 exports.EventSchema = mongoose_1.SchemaFactory.createForClass(MyEvent);
 //# sourceMappingURL=event.schema.js.map

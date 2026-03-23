@@ -14,73 +14,77 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BlogsService = void 0;
 const common_1 = require("@nestjs/common");
-const typeorm_1 = require("@nestjs/typeorm");
-const typeorm_2 = require("typeorm");
-const blog_post_entity_1 = require("./entities/blog-post.entity");
+const mongoose_1 = require("@nestjs/mongoose");
+const mongoose_2 = require("mongoose");
+const blog_post_schema_1 = require("./schemas/blog-post.schema");
 let BlogsService = class BlogsService {
-    blogsRepo;
-    constructor(blogsRepo) {
-        this.blogsRepo = blogsRepo;
+    blogModel;
+    constructor(blogModel) {
+        this.blogModel = blogModel;
     }
     async findAll(pagination) {
         const { page = 1, limit = 20, search, category } = pagination;
-        const qb = this.blogsRepo.createQueryBuilder('post');
+        const skip = (page - 1) * limit;
+        const query = {};
         if (search) {
-            qb.where('post.title ILIKE :search OR post.excerpt ILIKE :search', {
-                search: `%${search}%`,
-            });
+            query.$or = [
+                { title: { $regex: search, $options: 'i' } },
+                { excerpt: { $regex: search, $options: 'i' } },
+            ];
         }
         if (category) {
-            qb.andWhere('post.category = :category', { category });
+            query.category = category;
         }
-        qb.orderBy('post.created_at', 'DESC')
-            .skip((page - 1) * limit)
-            .take(limit);
-        const [data, total] = await qb.getManyAndCount();
+        const [data, total] = await Promise.all([
+            this.blogModel.find(query).sort({ created_at: -1 }).skip(skip).limit(limit).exec(),
+            this.blogModel.countDocuments(query).exec(),
+        ]);
         return { data, total, page, limit, pages: Math.ceil(total / limit) };
     }
     async findOne(id) {
-        const post = await this.blogsRepo.findOne({ where: { id } });
+        const post = await this.blogModel.findById(id).exec();
         if (!post)
             throw new common_1.NotFoundException(`Blog post #${id} not found`);
         return post;
     }
     async findBySlug(slug) {
-        const post = await this.blogsRepo.findOne({ where: { slug } });
+        const post = await this.blogModel.findOne({ slug }).exec();
         if (!post)
             throw new common_1.NotFoundException(`Blog post with slug "${slug}" not found`);
         return post;
     }
     async create(dto) {
         if (dto.slug) {
-            const exists = await this.blogsRepo.findOne({ where: { slug: dto.slug } });
+            const exists = await this.blogModel.findOne({ slug: dto.slug }).exec();
             if (exists)
                 throw new common_1.ConflictException(`Slug "${dto.slug}" already in use`);
         }
-        const post = this.blogsRepo.create(dto);
-        return this.blogsRepo.save(post);
+        const post = new this.blogModel(dto);
+        return post.save();
     }
     async update(id, dto) {
-        await this.findOne(id);
-        await this.blogsRepo.update(id, dto);
-        return this.findOne(id);
+        const post = await this.blogModel.findByIdAndUpdate(id, dto, { new: true }).exec();
+        if (!post)
+            throw new common_1.NotFoundException(`Blog post #${id} not found`);
+        return post;
     }
     async remove(id) {
-        await this.findOne(id);
-        await this.blogsRepo.delete(id);
+        const result = await this.blogModel.findByIdAndDelete(id).exec();
+        if (!result)
+            throw new common_1.NotFoundException(`Blog post #${id} not found`);
         return { message: 'Blog post deleted successfully' };
     }
     async getStats() {
-        const total = await this.blogsRepo.count();
-        const published = await this.blogsRepo.count({ where: { is_published: true } });
-        const featured = await this.blogsRepo.count({ where: { is_featured: true } });
+        const total = await this.blogModel.countDocuments().exec();
+        const published = await this.blogModel.countDocuments({ is_published: true }).exec();
+        const featured = await this.blogModel.countDocuments({ is_featured: true }).exec();
         return { total, published, drafts: total - published, featured };
     }
 };
 exports.BlogsService = BlogsService;
 exports.BlogsService = BlogsService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_1.InjectRepository)(blog_post_entity_1.BlogPost)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __param(0, (0, mongoose_1.InjectModel)(blog_post_schema_1.BlogPost.name)),
+    __metadata("design:paramtypes", [mongoose_2.Model])
 ], BlogsService);
 //# sourceMappingURL=blogs.service.js.map

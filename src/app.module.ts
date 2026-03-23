@@ -41,13 +41,13 @@ import { ServicesModule } from './modules/services/services.module';
     }),
 
     AuthModule,
-    // AdminModule,
-    // EventsModule,
-    // ClientsModule,
-    // BlogsModule,
-    // ResourcesModule,
-    // ProductsModule,
-    // ServicesModule,
+    AdminModule,
+    EventsModule,
+    ClientsModule,
+    BlogsModule,
+    ResourcesModule,
+    ProductsModule,
+    ServicesModule,
   ],
 })
 export class AppModule {}

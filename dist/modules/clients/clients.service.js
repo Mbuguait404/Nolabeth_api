@@ -14,61 +14,67 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClientsService = void 0;
 const common_1 = require("@nestjs/common");
-const typeorm_1 = require("@nestjs/typeorm");
-const typeorm_2 = require("typeorm");
-const client_entity_1 = require("./entities/client.entity");
+const mongoose_1 = require("@nestjs/mongoose");
+const mongoose_2 = require("mongoose");
+const client_schema_1 = require("./schemas/client.schema");
 let ClientsService = class ClientsService {
-    clientsRepo;
-    constructor(clientsRepo) {
-        this.clientsRepo = clientsRepo;
+    clientModel;
+    constructor(clientModel) {
+        this.clientModel = clientModel;
     }
     async findAll(pagination) {
         const { page = 1, limit = 20, search, status } = pagination;
-        const qb = this.clientsRepo.createQueryBuilder('client');
+        const skip = (page - 1) * limit;
+        const query = {};
         if (search) {
-            qb.where('client.full_name ILIKE :search OR client.email ILIKE :search', { search: `%${search}%` });
+            query.$or = [
+                { full_name: { $regex: search, $options: 'i' } },
+                { email: { $regex: search, $options: 'i' } },
+            ];
         }
         if (status) {
-            qb.andWhere('client.status = :status', { status });
+            query.status = status;
         }
-        qb.orderBy('client.created_at', 'DESC')
-            .skip((page - 1) * limit)
-            .take(limit);
-        const [data, total] = await qb.getManyAndCount();
+        const [data, total] = await Promise.all([
+            this.clientModel.find(query).sort({ created_at: -1 }).skip(skip).limit(limit).exec(),
+            this.clientModel.countDocuments(query).exec(),
+        ]);
         return { data, total, page, limit, pages: Math.ceil(total / limit) };
     }
     async findOne(id) {
-        const client = await this.clientsRepo.findOne({ where: { id } });
+        const client = await this.clientModel.findById(id).exec();
         if (!client)
             throw new common_1.NotFoundException(`Client #${id} not found`);
         return client;
     }
     async create(dto) {
-        const client = this.clientsRepo.create(dto);
-        return this.clientsRepo.save(client);
+        const client = new this.clientModel(dto);
+        return client.save();
     }
     async update(id, dto) {
-        await this.findOne(id);
-        await this.clientsRepo.update(id, dto);
-        return this.findOne(id);
+        const client = await this.clientModel.findByIdAndUpdate(id, dto, { new: true }).exec();
+        if (!client)
+            throw new common_1.NotFoundException(`Client #${id} not found`);
+        return client;
     }
     async remove(id) {
-        await this.findOne(id);
-        await this.clientsRepo.delete(id);
+        const result = await this.clientModel.findByIdAndDelete(id).exec();
+        if (!result)
+            throw new common_1.NotFoundException(`Client record deleted successfully`);
         return { message: 'Client record deleted successfully' };
     }
     async getStats() {
-        const total = await this.clientsRepo.count();
-        const newLeads = await this.clientsRepo.count({ where: { status: client_entity_1.ClientStatus.NEW } });
-        const inProgress = await this.clientsRepo.count({ where: { status: client_entity_1.ClientStatus.IN_PROGRESS } });
-        const completed = await this.clientsRepo.count({ where: { status: client_entity_1.ClientStatus.COMPLETED } });
+        const total = await this.clientModel.countDocuments().exec();
+        const newLeads = await this.clientModel.countDocuments({ status: client_schema_1.ClientStatus.NEW }).exec();
+        const inProgress = await this.clientModel.countDocuments({ status: client_schema_1.ClientStatus.IN_PROGRESS }).exec();
+        const completed = await this.clientModel.countDocuments({ status: client_schema_1.ClientStatus.COMPLETED }).exec();
         return { total, newLeads, inProgress, completed };
     }
 };
 exports.ClientsService = ClientsService;
 exports.ClientsService = ClientsService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_1.InjectRepository)(client_entity_1.Client)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __param(0, (0, mongoose_1.InjectModel)(client_schema_1.Client.name)),
+    __metadata("design:paramtypes", [mongoose_2.Model])
 ], ClientsService);
 //# sourceMappingURL=clients.service.js.map

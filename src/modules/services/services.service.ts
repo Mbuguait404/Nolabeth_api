@@ -1,58 +1,60 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, ILike } from 'typeorm';
-import { TherapyService } from './entities/therapy-service.entity';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { TherapyService, TherapyServiceDocument } from './schemas/therapy-service.schema';
 import { CreateTherapyServiceDto, UpdateTherapyServiceDto } from './dto/therapy-service.dto';
 import { PaginationDto } from '../../common/dto/pagination.dto';
 
 @Injectable()
 export class ServicesService {
   constructor(
-    @InjectRepository(TherapyService)
-    private servicesRepo: Repository<TherapyService>,
+    @InjectModel(TherapyService.name)
+    private serviceModel: Model<TherapyServiceDocument>,
   ) {}
 
   async findAll(pagination: PaginationDto) {
     const { page = 1, limit = 50, search } = pagination;
+    const skip = (page - 1) * limit;
 
-    const where = search ? { title: ILike(`%${search}%`) } : {};
+    const query: any = {};
+    if (search) {
+      query.title = { $regex: search, $options: 'i' };
+    }
 
-    const [data, total] = await this.servicesRepo.findAndCount({
-      where,
-      order: { priority_order: 'ASC', created_at: 'ASC' },
-      skip: (page - 1) * limit,
-      take: limit,
-    });
+    const [data, total] = await Promise.all([
+      this.serviceModel.find(query).sort({ priority_order: 1, created_at: 1 }).skip(skip).limit(limit).exec(),
+      this.serviceModel.countDocuments(query).exec(),
+    ]);
 
     return { data, total, page, limit, pages: Math.ceil(total / limit) };
   }
 
   async findOne(id: string) {
-    const service = await this.servicesRepo.findOne({ where: { id } });
+    const service = await this.serviceModel.findById(id).exec();
     if (!service) throw new NotFoundException(`Service #${id} not found`);
     return service;
   }
 
   async create(dto: CreateTherapyServiceDto) {
-    const service = this.servicesRepo.create(dto);
-    return this.servicesRepo.save(service);
+    const service = new this.serviceModel(dto);
+    return service.save();
   }
 
   async update(id: string, dto: UpdateTherapyServiceDto) {
-    await this.findOne(id);
-    await this.servicesRepo.update(id, dto);
-    return this.findOne(id);
+    const service = await this.serviceModel.findByIdAndUpdate(id, dto, { new: true }).exec();
+    if (!service) throw new NotFoundException(`Service #${id} not found`);
+    return service;
   }
 
   async remove(id: string) {
-    await this.findOne(id);
-    await this.servicesRepo.delete(id);
+    const result = await this.serviceModel.findByIdAndDelete(id).exec();
+    if (!result) throw new NotFoundException(`Service #${id} not found`);
     return { message: 'Service deleted successfully' };
   }
 
   async reorder(orderedIds: string[]) {
     const updates = orderedIds.map((id, index) =>
-      this.servicesRepo.update(id, { priority_order: index }),
+      this.serviceModel.findByIdAndUpdate(id, { priority_order: index }).exec(),
     );
     await Promise.all(updates);
     return { message: 'Services reordered successfully' };

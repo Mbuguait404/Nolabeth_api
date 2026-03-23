@@ -7,14 +7,14 @@ import { ClientsService } from './clients.service';
 import { CreateClientDto, UpdateClientDto } from './dto/client.dto';
 import { PaginationDto } from '../../common/dto/pagination.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
-import { ClientStatus } from './entities/client.entity';
+import { ClientStatus } from './schemas/client.schema';
 
 @ApiTags('Clients')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller('api/v1/admin/clients')
 export class ClientsController {
-  constructor(private readonly clientsService: ClientsService) {}
+  constructor(private readonly clientsService: ClientsService) { }
 
   @Get()
   @ApiOperation({ summary: 'List all clients' })

@@ -9,24 +9,24 @@ export declare class AdminController {
     private readonly productsService;
     constructor(eventsService: EventsService, clientsService: ClientsService, blogsService: BlogsService, productsService: ProductsService);
     getOverview(): Promise<{
-        events: {
+        eventsCount: {
             total: number;
             upcoming: number;
             past: number;
         };
-        clients: {
+        clientsCount: {
             total: number;
             newLeads: number;
             inProgress: number;
             completed: number;
         };
-        blogs: {
+        blogsCount: {
             total: number;
             published: number;
             drafts: number;
             featured: number;
         };
-        products: {
+        productsCount: {
             total: number;
             active: number;
             outOfStock: number;

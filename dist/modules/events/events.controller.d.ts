@@ -5,15 +5,39 @@ export declare class EventsController {
     private readonly eventsService;
     constructor(eventsService: EventsService);
     findAll(pagination: PaginationDto): Promise<{
-        data: import("./entities/event.entity").Event[];
+        data: (import("mongoose").Document<unknown, {}, import("./schemas/event.schema").EventDocument, {}, import("mongoose").DefaultSchemaOptions> & import("./schemas/event.schema").MyEvent & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
+            _id: import("mongoose").Types.ObjectId;
+        }> & {
+            __v: number;
+        } & {
+            id: string;
+        })[];
         total: number;
         page: number;
         limit: number;
         pages: number;
     }>;
-    findOne(id: string): Promise<import("./entities/event.entity").Event>;
-    create(dto: CreateEventDto): Promise<import("./entities/event.entity").Event>;
-    update(id: string, dto: UpdateEventDto): Promise<import("./entities/event.entity").Event>;
+    findOne(id: string): Promise<import("mongoose").Document<unknown, {}, import("./schemas/event.schema").EventDocument, {}, import("mongoose").DefaultSchemaOptions> & import("./schemas/event.schema").MyEvent & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    } & {
+        id: string;
+    }>;
+    create(dto: CreateEventDto): Promise<import("mongoose").Document<unknown, {}, import("./schemas/event.schema").EventDocument, {}, import("mongoose").DefaultSchemaOptions> & import("./schemas/event.schema").MyEvent & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    } & {
+        id: string;
+    }>;
+    update(id: string, dto: UpdateEventDto): Promise<import("mongoose").Document<unknown, {}, import("./schemas/event.schema").EventDocument, {}, import("mongoose").DefaultSchemaOptions> & import("./schemas/event.schema").MyEvent & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    } & {
+        id: string;
+    }>;
     remove(id: string): Promise<{
         message: string;
     }>;

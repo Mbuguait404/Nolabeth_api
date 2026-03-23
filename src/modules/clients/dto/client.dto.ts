@@ -1,6 +1,7 @@
 import { IsString, IsEmail, IsOptional, IsEnum } from 'class-validator';
 import { PartialType } from '@nestjs/mapped-types';
-import { InquiryType, ClientStatus } from '../entities/client.entity';
+import { InquiryType } from '../entities/client.entity';
+import { ClientStatus } from '../schemas/client.schema';
 
 export class CreateClientDto {
   @IsString()

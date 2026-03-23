@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { MongooseModule } from '@nestjs/mongoose';
 import { ResourcesService } from './resources.service';
 import { ResourcesController } from './resources.controller';
-import { Resource } from './entities/resource.entity';
+import { Resource, ResourceSchema } from './schemas/resource.schema';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Resource])],
+  imports: [MongooseModule.forFeature([{ name: Resource.name, schema: ResourceSchema }])],
   providers: [ResourcesService],
   controllers: [ResourcesController],
   exports: [ResourcesService],

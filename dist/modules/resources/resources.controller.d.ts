@@ -9,15 +9,39 @@ export declare class ResourcesController {
         type?: ResourceType;
         category?: string;
     }): Promise<{
-        data: import("./entities/resource.entity").Resource[];
+        data: (import("mongoose").Document<unknown, {}, import("./schemas/resource.schema").ResourceDocument, {}, import("mongoose").DefaultSchemaOptions> & import("./schemas/resource.schema").Resource & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
+            _id: import("mongoose").Types.ObjectId;
+        }> & {
+            __v: number;
+        } & {
+            id: string;
+        })[];
         total: number;
         page: number;
         limit: number;
         pages: number;
     }>;
-    findOne(id: string): Promise<import("./entities/resource.entity").Resource>;
-    create(dto: CreateResourceDto): Promise<import("./entities/resource.entity").Resource>;
-    update(id: string, dto: UpdateResourceDto): Promise<import("./entities/resource.entity").Resource>;
+    findOne(id: string): Promise<import("mongoose").Document<unknown, {}, import("./schemas/resource.schema").ResourceDocument, {}, import("mongoose").DefaultSchemaOptions> & import("./schemas/resource.schema").Resource & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    } & {
+        id: string;
+    }>;
+    create(dto: CreateResourceDto): Promise<import("mongoose").Document<unknown, {}, import("./schemas/resource.schema").ResourceDocument, {}, import("mongoose").DefaultSchemaOptions> & import("./schemas/resource.schema").Resource & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    } & {
+        id: string;
+    }>;
+    update(id: string, dto: UpdateResourceDto): Promise<import("mongoose").Document<unknown, {}, import("./schemas/resource.schema").ResourceDocument, {}, import("mongoose").DefaultSchemaOptions> & import("./schemas/resource.schema").Resource & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    } & {
+        id: string;
+    }>;
     remove(id: string): Promise<{
         message: string;
     }>;

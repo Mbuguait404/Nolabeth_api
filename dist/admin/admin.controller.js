@@ -37,10 +37,10 @@ let AdminController = class AdminController {
             this.productsService.getStats(),
         ]);
         return {
-            events,
-            clients,
-            blogs,
-            products,
+            eventsCount: events,
+            clientsCount: clients,
+            blogsCount: blogs,
+            productsCount: products,
             generated_at: new Date().toISOString(),
         };
     }

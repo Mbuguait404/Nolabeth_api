@@ -1,4 +1,5 @@
-import { InquiryType, ClientStatus } from '../entities/client.entity';
+import { InquiryType } from '../entities/client.entity';
+import { ClientStatus } from '../schemas/client.schema';
 export declare class CreateClientDto {
     full_name: string;
     email: string;

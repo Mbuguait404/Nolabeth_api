@@ -16,7 +16,10 @@ export enum EventCategory {
 
 export type EventDocument = MyEvent & Document;
 
-@Schema({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } })
+@Schema({ 
+  timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
+  collection: 'events'
+})
 export class MyEvent {
   @Prop({ required: true })
   title: string;

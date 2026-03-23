@@ -1,23 +1,53 @@
-import { Repository } from 'typeorm';
-import { BlogPost } from './entities/blog-post.entity';
+import { Model } from 'mongoose';
+import { BlogPost, BlogPostDocument } from './schemas/blog-post.schema';
 import { CreateBlogPostDto, UpdateBlogPostDto } from './dto/blog-post.dto';
 import { PaginationDto } from '../../common/dto/pagination.dto';
 export declare class BlogsService {
-    private blogsRepo;
-    constructor(blogsRepo: Repository<BlogPost>);
+    private blogModel;
+    constructor(blogModel: Model<BlogPostDocument>);
     findAll(pagination: PaginationDto & {
         category?: string;
     }): Promise<{
-        data: BlogPost[];
+        data: (import("mongoose").Document<unknown, {}, BlogPostDocument, {}, import("mongoose").DefaultSchemaOptions> & BlogPost & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
+            _id: import("mongoose").Types.ObjectId;
+        }> & {
+            __v: number;
+        } & {
+            id: string;
+        })[];
         total: number;
         page: number;
         limit: number;
         pages: number;
     }>;
-    findOne(id: string): Promise<BlogPost>;
-    findBySlug(slug: string): Promise<BlogPost>;
-    create(dto: CreateBlogPostDto): Promise<BlogPost>;
-    update(id: string, dto: UpdateBlogPostDto): Promise<BlogPost>;
+    findOne(id: string): Promise<import("mongoose").Document<unknown, {}, BlogPostDocument, {}, import("mongoose").DefaultSchemaOptions> & BlogPost & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    } & {
+        id: string;
+    }>;
+    findBySlug(slug: string): Promise<import("mongoose").Document<unknown, {}, BlogPostDocument, {}, import("mongoose").DefaultSchemaOptions> & BlogPost & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    } & {
+        id: string;
+    }>;
+    create(dto: CreateBlogPostDto): Promise<import("mongoose").Document<unknown, {}, BlogPostDocument, {}, import("mongoose").DefaultSchemaOptions> & BlogPost & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    } & {
+        id: string;
+    }>;
+    update(id: string, dto: UpdateBlogPostDto): Promise<import("mongoose").Document<unknown, {}, BlogPostDocument, {}, import("mongoose").DefaultSchemaOptions> & BlogPost & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    } & {
+        id: string;
+    }>;
     remove(id: string): Promise<{
         message: string;
     }>;

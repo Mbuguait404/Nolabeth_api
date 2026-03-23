@@ -1,58 +1,61 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, ILike } from 'typeorm';
-import { Event } from './entities/event.entity';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { MyEvent, EventDocument, EventStatus } from './schemas/event.schema';
 import { CreateEventDto, UpdateEventDto } from './dto/event.dto';
 import { PaginationDto } from '../../common/dto/pagination.dto';
 
 @Injectable()
 export class EventsService {
   constructor(
-    @InjectRepository(Event)
-    private eventsRepo: Repository<Event>,
+    @InjectModel(MyEvent.name)
+    private eventModel: Model<EventDocument>,
   ) {}
 
   async findAll(pagination: PaginationDto) {
     const { page = 1, limit = 20, search } = pagination;
-    const where = search ? { title: ILike(`%${search}%`) } : {};
+    const skip = (page - 1) * limit;
 
-    const [data, total] = await this.eventsRepo.findAndCount({
-      where,
-      order: { created_at: 'DESC' },
-      skip: (page - 1) * limit,
-      take: limit,
-    });
+    const query: any = {};
+    if (search) {
+      query.title = { $regex: search, $options: 'i' };
+    }
+
+    const [data, total] = await Promise.all([
+      this.eventModel.find(query).sort({ created_at: -1 }).skip(skip).limit(limit).exec(),
+      this.eventModel.countDocuments(query).exec(),
+    ]);
 
     return { data, total, page, limit, pages: Math.ceil(total / limit) };
   }
 
   async findOne(id: string) {
-    const event = await this.eventsRepo.findOne({ where: { id } });
+    const event = await this.eventModel.findById(id).exec();
     if (!event) throw new NotFoundException(`Event #${id} not found`);
     return event;
   }
 
   async create(dto: CreateEventDto) {
-    const event = this.eventsRepo.create(dto);
-    return this.eventsRepo.save(event);
+    const event = new this.eventModel(dto);
+    return event.save();
   }
 
   async update(id: string, dto: UpdateEventDto) {
-    await this.findOne(id);
-    await this.eventsRepo.update(id, dto);
-    return this.findOne(id);
+    const event = await this.eventModel.findByIdAndUpdate(id, dto, { new: true }).exec();
+    if (!event) throw new NotFoundException(`Event #${id} not found`);
+    return event;
   }
 
   async remove(id: string) {
-    await this.findOne(id);
-    await this.eventsRepo.delete(id);
+    const result = await this.eventModel.findByIdAndDelete(id).exec();
+    if (!result) throw new NotFoundException(`Event #${id} not found`);
     return { message: 'Event deleted successfully' };
   }
 
   async getStats() {
-    const total = await this.eventsRepo.count();
-    const upcoming = await this.eventsRepo.count({ where: { status: 'Upcoming' as any } });
-    const past = await this.eventsRepo.count({ where: { status: 'Past' as any } });
+    const total = await this.eventModel.countDocuments().exec();
+    const upcoming = await this.eventModel.countDocuments({ status: EventStatus.UPCOMING }).exec();
+    const past = await this.eventModel.countDocuments({ status: EventStatus.PAST }).exec();
     return { total, upcoming, past };
   }
 }

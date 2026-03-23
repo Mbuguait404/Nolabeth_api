@@ -16,6 +16,13 @@ const mongoose_1 = require("@nestjs/mongoose");
 const throttler_1 = require("@nestjs/throttler");
 const configuration_1 = __importDefault(require("./config/configuration"));
 const auth_module_1 = require("./auth/auth.module");
+const admin_module_1 = require("./admin/admin.module");
+const events_module_1 = require("./modules/events/events.module");
+const clients_module_1 = require("./modules/clients/clients.module");
+const blogs_module_1 = require("./modules/blogs/blogs.module");
+const resources_module_1 = require("./modules/resources/resources.module");
+const products_module_1 = require("./modules/products/products.module");
+const services_module_1 = require("./modules/services/services.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -35,6 +42,13 @@ exports.AppModule = AppModule = __decorate([
                 }),
             }),
             auth_module_1.AuthModule,
+            admin_module_1.AdminModule,
+            events_module_1.EventsModule,
+            clients_module_1.ClientsModule,
+            blogs_module_1.BlogsModule,
+            resources_module_1.ResourcesModule,
+            products_module_1.ProductsModule,
+            services_module_1.ServicesModule,
         ],
     })
 ], AppModule);

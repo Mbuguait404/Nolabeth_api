@@ -53,7 +53,7 @@ __decorate([
 __decorate([
     (0, common_1.Get)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Get a single resource by ID' }),
-    openapi.ApiResponse({ status: 200, type: require("./entities/resource.entity").Resource }),
+    openapi.ApiResponse({ status: 200, type: Object }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -62,7 +62,7 @@ __decorate([
 __decorate([
     (0, common_1.Post)(),
     (0, swagger_1.ApiOperation)({ summary: 'Create a new resource' }),
-    openapi.ApiResponse({ status: 201, type: require("./entities/resource.entity").Resource }),
+    openapi.ApiResponse({ status: 201, type: Object }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [resource_dto_1.CreateResourceDto]),
@@ -71,7 +71,7 @@ __decorate([
 __decorate([
     (0, common_1.Patch)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Update a resource' }),
-    openapi.ApiResponse({ status: 200, type: require("./entities/resource.entity").Resource }),
+    openapi.ApiResponse({ status: 200, type: Object }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),

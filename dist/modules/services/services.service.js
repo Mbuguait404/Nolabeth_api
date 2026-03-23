@@ -14,47 +14,51 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ServicesService = void 0;
 const common_1 = require("@nestjs/common");
-const typeorm_1 = require("@nestjs/typeorm");
-const typeorm_2 = require("typeorm");
-const therapy_service_entity_1 = require("./entities/therapy-service.entity");
+const mongoose_1 = require("@nestjs/mongoose");
+const mongoose_2 = require("mongoose");
+const therapy_service_schema_1 = require("./schemas/therapy-service.schema");
 let ServicesService = class ServicesService {
-    servicesRepo;
-    constructor(servicesRepo) {
-        this.servicesRepo = servicesRepo;
+    serviceModel;
+    constructor(serviceModel) {
+        this.serviceModel = serviceModel;
     }
     async findAll(pagination) {
         const { page = 1, limit = 50, search } = pagination;
-        const where = search ? { title: (0, typeorm_2.ILike)(`%${search}%`) } : {};
-        const [data, total] = await this.servicesRepo.findAndCount({
-            where,
-            order: { priority_order: 'ASC', created_at: 'ASC' },
-            skip: (page - 1) * limit,
-            take: limit,
-        });
+        const skip = (page - 1) * limit;
+        const query = {};
+        if (search) {
+            query.title = { $regex: search, $options: 'i' };
+        }
+        const [data, total] = await Promise.all([
+            this.serviceModel.find(query).sort({ priority_order: 1, created_at: 1 }).skip(skip).limit(limit).exec(),
+            this.serviceModel.countDocuments(query).exec(),
+        ]);
         return { data, total, page, limit, pages: Math.ceil(total / limit) };
     }
     async findOne(id) {
-        const service = await this.servicesRepo.findOne({ where: { id } });
+        const service = await this.serviceModel.findById(id).exec();
         if (!service)
             throw new common_1.NotFoundException(`Service #${id} not found`);
         return service;
     }
     async create(dto) {
-        const service = this.servicesRepo.create(dto);
-        return this.servicesRepo.save(service);
+        const service = new this.serviceModel(dto);
+        return service.save();
     }
     async update(id, dto) {
-        await this.findOne(id);
-        await this.servicesRepo.update(id, dto);
-        return this.findOne(id);
+        const service = await this.serviceModel.findByIdAndUpdate(id, dto, { new: true }).exec();
+        if (!service)
+            throw new common_1.NotFoundException(`Service #${id} not found`);
+        return service;
     }
     async remove(id) {
-        await this.findOne(id);
-        await this.servicesRepo.delete(id);
+        const result = await this.serviceModel.findByIdAndDelete(id).exec();
+        if (!result)
+            throw new common_1.NotFoundException(`Service #${id} not found`);
         return { message: 'Service deleted successfully' };
     }
     async reorder(orderedIds) {
-        const updates = orderedIds.map((id, index) => this.servicesRepo.update(id, { priority_order: index }));
+        const updates = orderedIds.map((id, index) => this.serviceModel.findByIdAndUpdate(id, { priority_order: index }).exec());
         await Promise.all(updates);
         return { message: 'Services reordered successfully' };
     }
@@ -62,7 +66,7 @@ let ServicesService = class ServicesService {
 exports.ServicesService = ServicesService;
 exports.ServicesService = ServicesService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_1.InjectRepository)(therapy_service_entity_1.TherapyService)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __param(0, (0, mongoose_1.InjectModel)(therapy_service_schema_1.TherapyService.name)),
+    __metadata("design:paramtypes", [mongoose_2.Model])
 ], ServicesService);
 //# sourceMappingURL=services.service.js.map

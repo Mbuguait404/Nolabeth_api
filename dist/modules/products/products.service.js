@@ -14,64 +14,66 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductsService = void 0;
 const common_1 = require("@nestjs/common");
-const typeorm_1 = require("@nestjs/typeorm");
-const typeorm_2 = require("typeorm");
-const product_entity_1 = require("./entities/product.entity");
+const mongoose_1 = require("@nestjs/mongoose");
+const mongoose_2 = require("mongoose");
+const product_schema_1 = require("./schemas/product.schema");
 let ProductsService = class ProductsService {
-    productsRepo;
-    constructor(productsRepo) {
-        this.productsRepo = productsRepo;
+    productModel;
+    constructor(productModel) {
+        this.productModel = productModel;
     }
     async findAll(pagination) {
         const { page = 1, limit = 20, search, category } = pagination;
-        const qb = this.productsRepo.createQueryBuilder('product');
+        const skip = (page - 1) * limit;
+        const query = {};
         if (search) {
-            qb.where('product.name ILIKE :search OR product.description ILIKE :search', {
-                search: `%${search}%`,
-            });
+            query.$or = [
+                { name: { $regex: search, $options: 'i' } },
+                { description: { $regex: search, $options: 'i' } },
+            ];
         }
         if (category) {
-            qb.andWhere('product.category = :category', { category });
+            query.category = category;
         }
-        qb.orderBy('product.created_at', 'DESC')
-            .skip((page - 1) * limit)
-            .take(limit);
-        const [data, total] = await qb.getManyAndCount();
+        const [data, total] = await Promise.all([
+            this.productModel.find(query).sort({ created_at: -1 }).skip(skip).limit(limit).exec(),
+            this.productModel.countDocuments(query).exec(),
+        ]);
         return { data, total, page, limit, pages: Math.ceil(total / limit) };
     }
     async findOne(id) {
-        const product = await this.productsRepo.findOne({ where: { id } });
+        const product = await this.productModel.findById(id).exec();
         if (!product)
             throw new common_1.NotFoundException(`Product #${id} not found`);
         return product;
     }
     async create(dto) {
-        const product = this.productsRepo.create(dto);
-        return this.productsRepo.save(product);
+        const product = new this.productModel(dto);
+        return product.save();
     }
     async update(id, dto) {
-        await this.findOne(id);
-        await this.productsRepo.update(id, dto);
-        return this.findOne(id);
+        const product = await this.productModel.findByIdAndUpdate(id, dto, { new: true }).exec();
+        if (!product)
+            throw new common_1.NotFoundException(`Product #${id} not found`);
+        return product;
     }
     async remove(id) {
-        await this.findOne(id);
-        await this.productsRepo.delete(id);
+        const result = await this.productModel.findByIdAndDelete(id).exec();
+        if (!result)
+            throw new common_1.NotFoundException(`Product #${id} not found`);
         return { message: 'Product deleted successfully' };
     }
     async getStats() {
-        const total = await this.productsRepo.count();
-        const active = await this.productsRepo.count({ where: { is_active: true } });
-        const outOfStock = await this.productsRepo.count({
-            where: { stock_status: 'Out of Stock' },
-        });
+        const total = await this.productModel.countDocuments().exec();
+        const active = await this.productModel.countDocuments({ is_active: true }).exec();
+        const outOfStock = await this.productModel.countDocuments({ stock_status: product_schema_1.StockStatus.OUT_OF_STOCK }).exec();
         return { total, active, outOfStock };
     }
 };
 exports.ProductsService = ProductsService;
 exports.ProductsService = ProductsService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_1.InjectRepository)(product_entity_1.Product)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __param(0, (0, mongoose_1.InjectModel)(product_schema_1.Product.name)),
+    __metadata("design:paramtypes", [mongoose_2.Model])
 ], ProductsService);
 //# sourceMappingURL=products.service.js.map

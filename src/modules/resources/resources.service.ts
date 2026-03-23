@@ -1,56 +1,56 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, ILike } from 'typeorm';
-import { Resource, ResourceType } from './entities/resource.entity';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Resource, ResourceDocument, ResourceType } from './schemas/resource.schema';
 import { CreateResourceDto, UpdateResourceDto } from './dto/resource.dto';
 import { PaginationDto } from '../../common/dto/pagination.dto';
 
 @Injectable()
 export class ResourcesService {
   constructor(
-    @InjectRepository(Resource)
-    private resourcesRepo: Repository<Resource>,
+    @InjectModel(Resource.name)
+    private resourceModel: Model<ResourceDocument>,
   ) {}
 
   async findAll(pagination: PaginationDto & { type?: ResourceType; category?: string }) {
     const { page = 1, limit = 20, search, type, category } = pagination;
+    const skip = (page - 1) * limit;
 
-    const qb = this.resourcesRepo.createQueryBuilder('resource');
-
+    const query: any = {};
     if (search) {
-      qb.where('resource.title ILIKE :search', { search: `%${search}%` });
+      query.title = { $regex: search, $options: 'i' };
     }
-    if (type) qb.andWhere('resource.type = :type', { type });
-    if (category) qb.andWhere('resource.category = :category', { category });
+    if (type) query.type = type;
+    if (category) query.category = category;
 
-    qb.orderBy('resource.created_at', 'DESC')
-      .skip((page - 1) * limit)
-      .take(limit);
+    const [data, total] = await Promise.all([
+      this.resourceModel.find(query).sort({ created_at: -1 }).skip(skip).limit(limit).exec(),
+      this.resourceModel.countDocuments(query).exec(),
+    ]);
 
-    const [data, total] = await qb.getManyAndCount();
     return { data, total, page, limit, pages: Math.ceil(total / limit) };
   }
 
   async findOne(id: string) {
-    const resource = await this.resourcesRepo.findOne({ where: { id } });
+    const resource = await this.resourceModel.findById(id).exec();
     if (!resource) throw new NotFoundException(`Resource #${id} not found`);
     return resource;
   }
 
   async create(dto: CreateResourceDto) {
-    const resource = this.resourcesRepo.create(dto);
-    return this.resourcesRepo.save(resource);
+    const resource = new this.resourceModel(dto);
+    return resource.save();
   }
 
   async update(id: string, dto: UpdateResourceDto) {
-    await this.findOne(id);
-    await this.resourcesRepo.update(id, dto);
-    return this.findOne(id);
+    const resource = await this.resourceModel.findByIdAndUpdate(id, dto, { new: true }).exec();
+    if (!resource) throw new NotFoundException(`Resource #${id} not found`);
+    return resource;
   }
 
   async remove(id: string) {
-    await this.findOne(id);
-    await this.resourcesRepo.delete(id);
+    const result = await this.resourceModel.findByIdAndDelete(id).exec();
+    if (!result) throw new NotFoundException(`Resource #${id} not found`);
     return { message: 'Resource deleted successfully' };
   }
 }

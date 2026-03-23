@@ -56,7 +56,7 @@ __decorate([
 __decorate([
     (0, common_1.Get)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Get a specific blog post by ID' }),
-    openapi.ApiResponse({ status: 200, type: require("./entities/blog-post.entity").BlogPost }),
+    openapi.ApiResponse({ status: 200, type: Object }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -65,7 +65,7 @@ __decorate([
 __decorate([
     (0, common_1.Get)('slug/:slug'),
     (0, swagger_1.ApiOperation)({ summary: 'Get a specific blog post by slug' }),
-    openapi.ApiResponse({ status: 200, type: require("./entities/blog-post.entity").BlogPost }),
+    openapi.ApiResponse({ status: 200, type: Object }),
     __param(0, (0, common_1.Param)('slug')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -74,7 +74,7 @@ __decorate([
 __decorate([
     (0, common_1.Post)(),
     (0, swagger_1.ApiOperation)({ summary: 'Create a new blog post' }),
-    openapi.ApiResponse({ status: 201, type: require("./entities/blog-post.entity").BlogPost }),
+    openapi.ApiResponse({ status: 201, type: Object }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [blog_post_dto_1.CreateBlogPostDto]),
@@ -83,7 +83,7 @@ __decorate([
 __decorate([
     (0, common_1.Patch)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Update a blog post' }),
-    openapi.ApiResponse({ status: 200, type: require("./entities/blog-post.entity").BlogPost }),
+    openapi.ApiResponse({ status: 200, type: Object }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),

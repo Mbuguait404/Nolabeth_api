@@ -1,69 +1,67 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, ILike } from 'typeorm';
-import { Product } from './entities/product.entity';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Product, ProductDocument, StockStatus } from './schemas/product.schema';
 import { CreateProductDto, UpdateProductDto } from './dto/product.dto';
 import { PaginationDto } from '../../common/dto/pagination.dto';
 
 @Injectable()
 export class ProductsService {
   constructor(
-    @InjectRepository(Product)
-    private productsRepo: Repository<Product>,
+    @InjectModel(Product.name)
+    private productModel: Model<ProductDocument>,
   ) {}
 
   async findAll(pagination: PaginationDto & { category?: string }) {
     const { page = 1, limit = 20, search, category } = pagination;
+    const skip = (page - 1) * limit;
 
-    const qb = this.productsRepo.createQueryBuilder('product');
-
+    const query: any = {};
     if (search) {
-      qb.where('product.name ILIKE :search OR product.description ILIKE :search', {
-        search: `%${search}%`,
-      });
+      query.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } },
+      ];
     }
-
     if (category) {
-      qb.andWhere('product.category = :category', { category });
+      query.category = category;
     }
 
-    qb.orderBy('product.created_at', 'DESC')
-      .skip((page - 1) * limit)
-      .take(limit);
+    const [data, total] = await Promise.all([
+      this.productModel.find(query).sort({ created_at: -1 }).skip(skip).limit(limit).exec(),
+      this.productModel.countDocuments(query).exec(),
+    ]);
 
-    const [data, total] = await qb.getManyAndCount();
     return { data, total, page, limit, pages: Math.ceil(total / limit) };
   }
 
   async findOne(id: string) {
-    const product = await this.productsRepo.findOne({ where: { id } });
+    const product = await this.productModel.findById(id).exec();
     if (!product) throw new NotFoundException(`Product #${id} not found`);
     return product;
   }
 
   async create(dto: CreateProductDto) {
-    const product = this.productsRepo.create(dto);
-    return this.productsRepo.save(product);
+    const product = new this.productModel(dto);
+    return product.save();
   }
 
   async update(id: string, dto: UpdateProductDto) {
-    await this.findOne(id);
-    await this.productsRepo.update(id, dto);
-    return this.findOne(id);
+    const product = await this.productModel.findByIdAndUpdate(id, dto, { new: true }).exec();
+    if (!product) throw new NotFoundException(`Product #${id} not found`);
+    return product;
   }
 
   async remove(id: string) {
-    await this.findOne(id);
-    await this.productsRepo.delete(id);
+    const result = await this.productModel.findByIdAndDelete(id).exec();
+    if (!result) throw new NotFoundException(`Product #${id} not found`);
     return { message: 'Product deleted successfully' };
   }
 
   async getStats() {
-    const total = await this.productsRepo.count();
-    const active = await this.productsRepo.count({ where: { is_active: true } });
-    const outOfStock = await this.productsRepo.count({
-      where: { stock_status: 'Out of Stock' as any },
-    });
+    const total = await this.productModel.countDocuments().exec();
+    const active = await this.productModel.countDocuments({ is_active: true }).exec();
+    const outOfStock = await this.productModel.countDocuments({ stock_status: StockStatus.OUT_OF_STOCK }).exec();
     return { total, active, outOfStock };
   }
 }
