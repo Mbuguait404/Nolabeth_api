@@ -14,6 +14,7 @@ import { ResourcesModule } from './modules/resources/resources.module';
 import { ProductsModule } from './modules/products/products.module';
 import { ServicesModule } from './modules/services/services.module';
 import { SettingsModule } from './modules/settings/settings.module';
+import { BookingsModule } from './modules/bookings/bookings.module';
 
 // // TODO: Port these entities to Mongoose schemas
 // import { AdminUser } from './auth/entities/admin-user.entity';
@@ -50,6 +51,7 @@ import { SettingsModule } from './modules/settings/settings.module';
     ProductsModule,
     ServicesModule,
     SettingsModule,
+    BookingsModule,
   ],
 })
 export class AppModule {}

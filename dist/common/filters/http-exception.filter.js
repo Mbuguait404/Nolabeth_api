@@ -15,18 +15,39 @@ let AllExceptionsFilter = AllExceptionsFilter_1 = class AllExceptionsFilter {
         const ctx = host.switchToHttp();
         const response = ctx.getResponse();
         const request = ctx.getRequest();
-        const status = exception instanceof common_1.HttpException
+        let status = exception instanceof common_1.HttpException
             ? exception.getStatus()
             : common_1.HttpStatus.INTERNAL_SERVER_ERROR;
-        const message = exception instanceof common_1.HttpException
+        let message = exception instanceof common_1.HttpException
             ? exception.getResponse()
-            : 'Internal server error';
+            : (exception?.message || 'Internal server error');
+        if (exception?.code === 11000 || (exception?.name === 'MongoServerError' && exception?.code === 11000)) {
+            status = common_1.HttpStatus.CONFLICT;
+            const keyValue = exception.keyValue;
+            if (keyValue) {
+                const field = Object.keys(keyValue)[0];
+                message = `${field.charAt(0).toUpperCase() + field.slice(1)} already exists.`;
+            }
+            else {
+                message = 'Duplicate key error.';
+            }
+        }
+        else if (exception?.name === 'ValidationError') {
+            status = common_1.HttpStatus.BAD_REQUEST;
+            message = Object.values(exception.errors || {})
+                .map((err) => err.message)
+                .join(', ');
+        }
+        else if (exception?.name === 'CastError') {
+            status = common_1.HttpStatus.BAD_REQUEST;
+            message = `Invalid ${exception.path}: ${exception.value}`;
+        }
         const errorResponse = {
             statusCode: status,
             timestamp: new Date().toISOString(),
             path: request.url,
             method: request.method,
-            message: typeof message === 'object' && 'message' in message
+            message: typeof message === 'object' && message !== null && 'message' in message
                 ? message.message
                 : message,
         };
