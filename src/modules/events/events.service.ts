@@ -1,6 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { MyEvent, EventDocument, EventStatus } from './schemas/event.schema';
 import { CreateEventDto, UpdateEventDto } from './dto/event.dto';
 import { PaginationDto } from '../../common/dto/pagination.dto';
@@ -29,13 +29,23 @@ export class EventsService {
     return { data, total, page, limit, pages: Math.ceil(total / limit) };
   }
 
-  async findOne(id: string) {
-    const event = await this.eventModel.findById(id).exec();
-    if (!event) throw new NotFoundException(`Event #${id} not found`);
+  async findOne(idOrSlug: string) {
+    let event;
+    if (Types.ObjectId.isValid(idOrSlug)) {
+      event = await this.eventModel.findById(idOrSlug).exec();
+    } else {
+      event = await this.eventModel.findOne({ slug: idOrSlug }).exec();
+    }
+
+    if (!event) throw new NotFoundException(`Event "${idOrSlug}" not found`);
     return event;
   }
 
   async create(dto: CreateEventDto) {
+    if (dto.slug) {
+      const exists = await this.eventModel.findOne({ slug: dto.slug }).exec();
+      if (exists) throw new ConflictException(`Slug "${dto.slug}" already in use`);
+    }
     const event = new this.eventModel(dto);
     return event.save();
   }

@@ -9,9 +9,7 @@ import { PaginationDto } from '../../common/dto/pagination.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 
 @ApiTags('Blogs')
-@ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
-@Controller('api/v1/admin/blogs')
+@Controller('api/v1/blogs')
 export class BlogsController {
   constructor(private readonly blogsService: BlogsService) {}
 
@@ -34,18 +32,24 @@ export class BlogsController {
   }
 
   @Post()
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Create a new blog post' })
   create(@Body() dto: CreateBlogPostDto) {
     return this.blogsService.create(dto);
   }
 
   @Patch(':id')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Update a blog post' })
   update(@Param('id') id: string, @Body() dto: UpdateBlogPostDto) {
     return this.blogsService.update(id, dto);
   }
 
   @Delete(':id')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Delete a blog post' })
   remove(@Param('id') id: string) {
     return this.blogsService.remove(id);

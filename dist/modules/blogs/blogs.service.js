@@ -41,10 +41,16 @@ let BlogsService = class BlogsService {
         ]);
         return { data, total, page, limit, pages: Math.ceil(total / limit) };
     }
-    async findOne(id) {
-        const post = await this.blogModel.findById(id).exec();
+    async findOne(idOrSlug) {
+        let post;
+        if (mongoose_2.Types.ObjectId.isValid(idOrSlug)) {
+            post = await this.blogModel.findById(idOrSlug).exec();
+        }
+        else {
+            post = await this.blogModel.findOne({ slug: idOrSlug }).exec();
+        }
         if (!post)
-            throw new common_1.NotFoundException(`Blog post #${id} not found`);
+            throw new common_1.NotFoundException(`Blog post "${idOrSlug}" not found`);
         return post;
     }
     async findBySlug(slug) {

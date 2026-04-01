@@ -65,6 +65,8 @@ __decorate([
 ], ServicesController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Post)(),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, swagger_1.ApiOperation)({ summary: 'Create a new service' }),
     openapi.ApiResponse({ status: 201, type: Object }),
     __param(0, (0, common_1.Body)()),
@@ -74,6 +76,8 @@ __decorate([
 ], ServicesController.prototype, "create", null);
 __decorate([
     (0, common_1.Post)('reorder'),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, swagger_1.ApiOperation)({ summary: 'Reorder services list' }),
     openapi.ApiResponse({ status: 201 }),
     __param(0, (0, common_1.Body)()),
@@ -83,6 +87,8 @@ __decorate([
 ], ServicesController.prototype, "reorder", null);
 __decorate([
     (0, common_1.Patch)(':id'),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, swagger_1.ApiOperation)({ summary: 'Update a service' }),
     openapi.ApiResponse({ status: 200, type: Object }),
     __param(0, (0, common_1.Param)('id')),
@@ -93,6 +99,8 @@ __decorate([
 ], ServicesController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, swagger_1.ApiOperation)({ summary: 'Delete a service' }),
     openapi.ApiResponse({ status: 200 }),
     __param(0, (0, common_1.Param)('id')),
@@ -102,9 +110,7 @@ __decorate([
 ], ServicesController.prototype, "remove", null);
 exports.ServicesController = ServicesController = __decorate([
     (0, swagger_1.ApiTags)('Services'),
-    (0, swagger_1.ApiBearerAuth)(),
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, common_1.Controller)('api/v1/admin/services'),
+    (0, common_1.Controller)('api/v1/services'),
     __metadata("design:paramtypes", [services_service_1.ServicesService])
 ], ServicesController);
 //# sourceMappingURL=services.controller.js.map

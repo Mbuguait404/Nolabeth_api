@@ -10,9 +10,7 @@ import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { ResourceType } from './entities/resource.entity';
 
 @ApiTags('Resources')
-@ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
-@Controller('api/v1/admin/resources')
+@Controller('api/v1/resources')
 export class ResourcesController {
   constructor(private readonly resourcesService: ResourcesService) {}
 
@@ -29,18 +27,24 @@ export class ResourcesController {
   }
 
   @Post()
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Create a new resource' })
   create(@Body() dto: CreateResourceDto) {
     return this.resourcesService.create(dto);
   }
 
   @Patch(':id')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Update a resource' })
   update(@Param('id') id: string, @Body() dto: UpdateResourceDto) {
     return this.resourcesService.update(id, dto);
   }
 
   @Delete(':id')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Delete a resource' })
   remove(@Param('id') id: string) {
     return this.resourcesService.remove(id);

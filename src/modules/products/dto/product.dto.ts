@@ -8,6 +8,10 @@ export class CreateProductDto {
   @IsString()
   name: string;
 
+  @IsOptional()
+  @IsString()
+  slug?: string;
+
   @IsString()
   description: string;
 

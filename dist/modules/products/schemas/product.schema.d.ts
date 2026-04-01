@@ -13,6 +13,7 @@ export declare enum StockStatus {
 export type ProductDocument = Product & Document;
 export declare class Product {
     name: string;
+    slug: string;
     description: string;
     price_kes: number;
     category: string;
@@ -45,6 +46,15 @@ export declare const ProductSchema: import("mongoose").Schema<Product, import("m
     id: string;
 }, {
     name?: import("mongoose").SchemaDefinitionProperty<string, Product, Document<unknown, {}, Product, {
+        id: string;
+    }, import("mongoose").DefaultSchemaOptions> & Omit<Product & {
+        _id: import("mongoose").Types.ObjectId;
+    } & {
+        __v: number;
+    }, "id"> & {
+        id: string;
+    }> | undefined;
+    slug?: import("mongoose").SchemaDefinitionProperty<string, Product, Document<unknown, {}, Product, {
         id: string;
     }, import("mongoose").DefaultSchemaOptions> & Omit<Product & {
         _id: import("mongoose").Types.ObjectId;

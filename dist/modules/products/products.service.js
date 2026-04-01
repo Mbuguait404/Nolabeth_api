@@ -41,13 +41,24 @@ let ProductsService = class ProductsService {
         ]);
         return { data, total, page, limit, pages: Math.ceil(total / limit) };
     }
-    async findOne(id) {
-        const product = await this.productModel.findById(id).exec();
+    async findOne(idOrSlug) {
+        let product;
+        if (mongoose_2.Types.ObjectId.isValid(idOrSlug)) {
+            product = await this.productModel.findById(idOrSlug).exec();
+        }
+        else {
+            product = await this.productModel.findOne({ slug: idOrSlug }).exec();
+        }
         if (!product)
-            throw new common_1.NotFoundException(`Product #${id} not found`);
+            throw new common_1.NotFoundException(`Product "${idOrSlug}" not found`);
         return product;
     }
     async create(dto) {
+        if (dto.slug) {
+            const existing = await this.productModel.findOne({ slug: dto.slug }).exec();
+            if (existing)
+                throw new common_1.ConflictException(`Slug "${dto.slug}" already in use`);
+        }
         const product = new this.productModel(dto);
         return product.save();
     }

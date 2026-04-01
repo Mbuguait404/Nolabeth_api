@@ -2,6 +2,7 @@ import { Connection } from 'mongoose';
 import { EventStatus, EventCategory } from '../../modules/events/schemas/event.schema';
 export declare const upcomingEvents: {
     title: string;
+    slug: string;
     date: string;
     time_range: string;
     location: string;

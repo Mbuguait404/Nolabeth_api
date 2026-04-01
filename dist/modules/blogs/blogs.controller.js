@@ -73,6 +73,8 @@ __decorate([
 ], BlogsController.prototype, "findBySlug", null);
 __decorate([
     (0, common_1.Post)(),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, swagger_1.ApiOperation)({ summary: 'Create a new blog post' }),
     openapi.ApiResponse({ status: 201, type: Object }),
     __param(0, (0, common_1.Body)()),
@@ -82,6 +84,8 @@ __decorate([
 ], BlogsController.prototype, "create", null);
 __decorate([
     (0, common_1.Patch)(':id'),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, swagger_1.ApiOperation)({ summary: 'Update a blog post' }),
     openapi.ApiResponse({ status: 200, type: Object }),
     __param(0, (0, common_1.Param)('id')),
@@ -92,6 +96,8 @@ __decorate([
 ], BlogsController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, swagger_1.ApiOperation)({ summary: 'Delete a blog post' }),
     openapi.ApiResponse({ status: 200 }),
     __param(0, (0, common_1.Param)('id')),
@@ -101,9 +107,7 @@ __decorate([
 ], BlogsController.prototype, "remove", null);
 exports.BlogsController = BlogsController = __decorate([
     (0, swagger_1.ApiTags)('Blogs'),
-    (0, swagger_1.ApiBearerAuth)(),
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, common_1.Controller)('api/v1/admin/blogs'),
+    (0, common_1.Controller)('api/v1/blogs'),
     __metadata("design:paramtypes", [blogs_service_1.BlogsService])
 ], BlogsController);
 //# sourceMappingURL=blogs.controller.js.map

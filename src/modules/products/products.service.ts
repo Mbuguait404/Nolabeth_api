@@ -1,6 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Product, ProductDocument, StockStatus } from './schemas/product.schema';
 import { CreateProductDto, UpdateProductDto } from './dto/product.dto';
 import { PaginationDto } from '../../common/dto/pagination.dto';
@@ -35,13 +35,24 @@ export class ProductsService {
     return { data, total, page, limit, pages: Math.ceil(total / limit) };
   }
 
-  async findOne(id: string) {
-    const product = await this.productModel.findById(id).exec();
-    if (!product) throw new NotFoundException(`Product #${id} not found`);
+  async findOne(idOrSlug: string) {
+    let product;
+    if (Types.ObjectId.isValid(idOrSlug)) {
+        product = await this.productModel.findById(idOrSlug).exec();
+    } else {
+        product = await this.productModel.findOne({ slug: idOrSlug }).exec();
+    }
+    
+    if (!product) throw new NotFoundException(`Product "${idOrSlug}" not found`);
     return product;
   }
 
   async create(dto: CreateProductDto) {
+    // If slug is provided, check if it already exists
+    if (dto.slug) {
+        const existing = await this.productModel.findOne({ slug: dto.slug }).exec();
+        if (existing) throw new ConflictException(`Slug "${dto.slug}" already in use`);
+    }
     const product = new this.productModel(dto);
     return product.save();
   }

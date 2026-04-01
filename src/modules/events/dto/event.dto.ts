@@ -8,6 +8,10 @@ export class CreateEventDto {
   @IsString()
   title: string;
 
+  @IsOptional()
+  @IsString()
+  slug?: string;
+
   @IsString()
   date: string;
 

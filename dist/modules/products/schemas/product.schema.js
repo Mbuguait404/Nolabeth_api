@@ -26,6 +26,7 @@ var StockStatus;
 })(StockStatus || (exports.StockStatus = StockStatus = {}));
 let Product = class Product {
     name;
+    slug;
     description;
     price_kes;
     category;
@@ -43,6 +44,10 @@ __decorate([
     (0, mongoose_1.Prop)({ required: true }),
     __metadata("design:type", String)
 ], Product.prototype, "name", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: true, unique: true }),
+    __metadata("design:type", String)
+], Product.prototype, "slug", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ type: String, required: true }),
     __metadata("design:type", String)
@@ -91,4 +96,15 @@ exports.Product = Product = __decorate([
     (0, mongoose_1.Schema)({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } })
 ], Product);
 exports.ProductSchema = mongoose_1.SchemaFactory.createForClass(Product);
+exports.ProductSchema.pre('save', function (next) {
+    if (this.name && !this.slug) {
+        this.slug = this.name
+            .toLowerCase()
+            .replace(/[^a-z0-9\s-]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/-+/g, '-')
+            .trim();
+    }
+    next();
+});
 //# sourceMappingURL=product.schema.js.map

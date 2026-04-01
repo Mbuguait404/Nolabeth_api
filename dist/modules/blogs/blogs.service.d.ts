@@ -1,4 +1,4 @@
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { BlogPost, BlogPostDocument } from './schemas/blog-post.schema';
 import { CreateBlogPostDto, UpdateBlogPostDto } from './dto/blog-post.dto';
 import { PaginationDto } from '../../common/dto/pagination.dto';
@@ -8,8 +8,8 @@ export declare class BlogsService {
     findAll(pagination: PaginationDto & {
         category?: string;
     }): Promise<{
-        data: (import("mongoose").Document<unknown, {}, BlogPostDocument, {}, import("mongoose").DefaultSchemaOptions> & BlogPost & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
-            _id: import("mongoose").Types.ObjectId;
+        data: (import("mongoose").Document<unknown, {}, BlogPostDocument, {}, import("mongoose").DefaultSchemaOptions> & BlogPost & import("mongoose").Document<Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
+            _id: Types.ObjectId;
         }> & {
             __v: number;
         } & {
@@ -20,29 +20,23 @@ export declare class BlogsService {
         limit: number;
         pages: number;
     }>;
-    findOne(id: string): Promise<import("mongoose").Document<unknown, {}, BlogPostDocument, {}, import("mongoose").DefaultSchemaOptions> & BlogPost & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
-        _id: import("mongoose").Types.ObjectId;
+    findOne(idOrSlug: string): Promise<any>;
+    findBySlug(slug: string): Promise<import("mongoose").Document<unknown, {}, BlogPostDocument, {}, import("mongoose").DefaultSchemaOptions> & BlogPost & import("mongoose").Document<Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
+        _id: Types.ObjectId;
     }> & {
         __v: number;
     } & {
         id: string;
     }>;
-    findBySlug(slug: string): Promise<import("mongoose").Document<unknown, {}, BlogPostDocument, {}, import("mongoose").DefaultSchemaOptions> & BlogPost & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
-        _id: import("mongoose").Types.ObjectId;
+    create(dto: CreateBlogPostDto): Promise<import("mongoose").Document<unknown, {}, BlogPostDocument, {}, import("mongoose").DefaultSchemaOptions> & BlogPost & import("mongoose").Document<Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
+        _id: Types.ObjectId;
     }> & {
         __v: number;
     } & {
         id: string;
     }>;
-    create(dto: CreateBlogPostDto): Promise<import("mongoose").Document<unknown, {}, BlogPostDocument, {}, import("mongoose").DefaultSchemaOptions> & BlogPost & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
-        _id: import("mongoose").Types.ObjectId;
-    }> & {
-        __v: number;
-    } & {
-        id: string;
-    }>;
-    update(id: string, dto: UpdateBlogPostDto): Promise<import("mongoose").Document<unknown, {}, BlogPostDocument, {}, import("mongoose").DefaultSchemaOptions> & BlogPost & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
-        _id: import("mongoose").Types.ObjectId;
+    update(id: string, dto: UpdateBlogPostDto): Promise<import("mongoose").Document<unknown, {}, BlogPostDocument, {}, import("mongoose").DefaultSchemaOptions> & BlogPost & import("mongoose").Document<Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
+        _id: Types.ObjectId;
     }> & {
         __v: number;
     } & {

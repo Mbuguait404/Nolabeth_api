@@ -24,6 +24,9 @@ export class MyEvent {
   @Prop({ required: true })
   title: string;
 
+  @Prop({ required: true, unique: true })
+  slug: string;
+
   @Prop({ required: true })
   date: string;
 
@@ -68,3 +71,16 @@ export class MyEvent {
 }
 
 export const EventSchema = SchemaFactory.createForClass(MyEvent);
+
+// Pre-save hook for slug generation from title
+EventSchema.pre('save', function (this: EventDocument, next: Function) {
+  if (this.title && !this.slug) {
+    this.slug = this.title
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .trim();
+  }
+  next();
+});

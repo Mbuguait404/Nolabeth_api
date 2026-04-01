@@ -16,6 +16,7 @@ const mapped_types_1 = require("@nestjs/mapped-types");
 const product_entity_1 = require("../entities/product.entity");
 class CreateProductDto {
     name;
+    slug;
     description;
     price_kes;
     category;
@@ -27,7 +28,7 @@ class CreateProductDto {
     details;
     is_active;
     static _OPENAPI_METADATA_FACTORY() {
-        return { name: { required: true, type: () => String }, description: { required: true, type: () => String }, price_kes: { required: true, type: () => Number, minimum: 0 }, category: { required: true, type: () => String }, image_url: { required: false, type: () => String }, badge: { required: false, enum: require("../entities/product.entity").ProductBadge }, stock_status: { required: false, enum: require("../entities/product.entity").StockStatus }, rating: { required: false, type: () => Number }, features: { required: false, type: () => [String] }, details: { required: false, type: () => String }, is_active: { required: false, type: () => Boolean } };
+        return { name: { required: true, type: () => String }, slug: { required: false, type: () => String }, description: { required: true, type: () => String }, price_kes: { required: true, type: () => Number, minimum: 0 }, category: { required: true, type: () => String }, image_url: { required: false, type: () => String }, badge: { required: false, enum: require("../entities/product.entity").ProductBadge }, stock_status: { required: false, enum: require("../entities/product.entity").StockStatus }, rating: { required: false, type: () => Number }, features: { required: false, type: () => [String] }, details: { required: false, type: () => String }, is_active: { required: false, type: () => Boolean } };
     }
 }
 exports.CreateProductDto = CreateProductDto;
@@ -35,6 +36,11 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateProductDto.prototype, "name", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateProductDto.prototype, "slug", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)

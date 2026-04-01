@@ -21,6 +21,9 @@ export class Product {
   @Prop({ required: true })
   name: string;
 
+  @Prop({ required: true, unique: true })
+  slug: string;
+
   @Prop({ type: String, required: true })
   description: string;
 
@@ -56,3 +59,16 @@ export class Product {
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);
+
+// Pre-save hook for slug generation from name
+ProductSchema.pre('save', function (this: ProductDocument, next: Function) {
+  if (this.name && !this.slug) {
+    this.slug = this.name
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .trim();
+  }
+  next();
+});

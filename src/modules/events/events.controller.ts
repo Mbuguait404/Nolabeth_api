@@ -9,9 +9,7 @@ import { PaginationDto } from '../../common/dto/pagination.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 
 @ApiTags('Events')
-@ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
-@Controller('api/v1/admin/events')
+@Controller('api/v1/events')
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
@@ -28,18 +26,24 @@ export class EventsController {
   }
 
   @Post()
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Create a new event' })
   create(@Body() dto: CreateEventDto) {
     return this.eventsService.create(dto);
   }
 
   @Patch(':id')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Update an event' })
   update(@Param('id') id: string, @Body() dto: UpdateEventDto) {
     return this.eventsService.update(id, dto);
   }
 
   @Delete(':id')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Delete an event' })
   remove(@Param('id') id: string) {
     return this.eventsService.remove(id);

@@ -35,13 +35,24 @@ let EventsService = class EventsService {
         ]);
         return { data, total, page, limit, pages: Math.ceil(total / limit) };
     }
-    async findOne(id) {
-        const event = await this.eventModel.findById(id).exec();
+    async findOne(idOrSlug) {
+        let event;
+        if (mongoose_2.Types.ObjectId.isValid(idOrSlug)) {
+            event = await this.eventModel.findById(idOrSlug).exec();
+        }
+        else {
+            event = await this.eventModel.findOne({ slug: idOrSlug }).exec();
+        }
         if (!event)
-            throw new common_1.NotFoundException(`Event #${id} not found`);
+            throw new common_1.NotFoundException(`Event "${idOrSlug}" not found`);
         return event;
     }
     async create(dto) {
+        if (dto.slug) {
+            const exists = await this.eventModel.findOne({ slug: dto.slug }).exec();
+            if (exists)
+                throw new common_1.ConflictException(`Slug "${dto.slug}" already in use`);
+        }
         const event = new this.eventModel(dto);
         return event.save();
     }

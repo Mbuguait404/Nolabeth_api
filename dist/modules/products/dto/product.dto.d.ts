@@ -1,6 +1,7 @@
 import { ProductBadge, StockStatus } from '../entities/product.entity';
 export declare class CreateProductDto {
     name: string;
+    slug?: string;
     description: string;
     price_kes: number;
     category: string;

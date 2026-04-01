@@ -9,9 +9,7 @@ import { PaginationDto } from '../../common/dto/pagination.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 
 @ApiTags('Services')
-@ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
-@Controller('api/v1/admin/services')
+@Controller('api/v1/services')
 export class ServicesController {
   constructor(private readonly servicesService: ServicesService) {}
 
@@ -28,24 +26,32 @@ export class ServicesController {
   }
 
   @Post()
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Create a new service' })
   create(@Body() dto: CreateTherapyServiceDto) {
     return this.servicesService.create(dto);
   }
 
   @Post('reorder')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Reorder services list' })
   reorder(@Body() body: { orderedIds: string[] }) {
     return this.servicesService.reorder(body.orderedIds);
   }
 
   @Patch(':id')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Update a service' })
   update(@Param('id') id: string, @Body() dto: UpdateTherapyServiceDto) {
     return this.servicesService.update(id, dto);
   }
 
   @Delete(':id')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Delete a service' })
   remove(@Param('id') id: string) {
     return this.servicesService.remove(id);

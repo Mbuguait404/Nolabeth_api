@@ -4,6 +4,7 @@ import { EventSchema, EventStatus, EventCategory } from '../../modules/events/sc
 export const upcomingEvents = [
   {
     title: 'Noble Lazuli & Beyond Therapy Counselling Program (Cohort 2)',
+    slug: 'noble-lazuli-beyond-therapy-counselling-program-cohort-2',
     date: 'April 2026',
     time_range: '6-Week Program',
     location: 'Online Service',
@@ -29,6 +30,7 @@ export const upcomingEvents = [
   },
   {
     title: 'Stress Management Workshop',
+    slug: 'stress-management-workshop',
     date: 'March 25, 2026',
     time_range: '10:00 AM - 2:00 PM',
     location: 'NOLABETH Wellness Center, Mombasa',
@@ -51,6 +53,7 @@ export const upcomingEvents = [
   },
   {
     title: 'Family Communication Skills',
+    slug: 'family-communication-skills',
     date: 'April 8, 2026',
     time_range: '2:00 PM - 5:00 PM',
     location: 'Online (Zoom)',
@@ -73,6 +76,7 @@ export const upcomingEvents = [
   },
   {
     title: 'Teen Mental Health Awareness',
+    slug: 'teen-mental-health-awareness',
     date: 'April 15, 2026',
     time_range: '9:00 AM - 1:00 PM',
     location: 'NOLABETH Wellness Center, Mombasa',

@@ -26,6 +26,7 @@ var EventCategory;
 })(EventCategory || (exports.EventCategory = EventCategory = {}));
 let MyEvent = class MyEvent {
     title;
+    slug;
     date;
     time_range;
     location;
@@ -46,6 +47,10 @@ __decorate([
     (0, mongoose_1.Prop)({ required: true }),
     __metadata("design:type", String)
 ], MyEvent.prototype, "title", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: true, unique: true }),
+    __metadata("design:type", String)
+], MyEvent.prototype, "slug", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ required: true }),
     __metadata("design:type", String)
@@ -109,4 +114,15 @@ exports.MyEvent = MyEvent = __decorate([
     })
 ], MyEvent);
 exports.EventSchema = mongoose_1.SchemaFactory.createForClass(MyEvent);
+exports.EventSchema.pre('save', function (next) {
+    if (this.title && !this.slug) {
+        this.slug = this.title
+            .toLowerCase()
+            .replace(/[^a-z0-9\s-]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/-+/g, '-')
+            .trim();
+    }
+    next();
+});
 //# sourceMappingURL=event.schema.js.map

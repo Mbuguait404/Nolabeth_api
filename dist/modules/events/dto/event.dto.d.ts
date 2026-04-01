@@ -1,6 +1,7 @@
 import { EventStatus, EventCategory } from '../entities/event.entity';
 export declare class CreateEventDto {
     title: string;
+    slug?: string;
     date: string;
     time_range?: string;
     location: string;

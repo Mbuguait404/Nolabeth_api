@@ -13,6 +13,7 @@ export declare enum EventCategory {
 export type EventDocument = MyEvent & Document;
 export declare class MyEvent {
     title: string;
+    slug: string;
     date: string;
     time_range: string;
     location: string;
@@ -48,6 +49,15 @@ export declare const EventSchema: import("mongoose").Schema<MyEvent, import("mon
     id: string;
 }, {
     title?: import("mongoose").SchemaDefinitionProperty<string, MyEvent, Document<unknown, {}, MyEvent, {
+        id: string;
+    }, import("mongoose").DefaultSchemaOptions> & Omit<MyEvent & {
+        _id: import("mongoose").Types.ObjectId;
+    } & {
+        __v: number;
+    }, "id"> & {
+        id: string;
+    }> | undefined;
+    slug?: import("mongoose").SchemaDefinitionProperty<string, MyEvent, Document<unknown, {}, MyEvent, {
         id: string;
     }, import("mongoose").DefaultSchemaOptions> & Omit<MyEvent & {
         _id: import("mongoose").Types.ObjectId;

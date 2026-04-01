@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { BlogPost, BlogPostDocument } from './schemas/blog-post.schema';
 import { CreateBlogPostDto, UpdateBlogPostDto } from './dto/blog-post.dto';
 import { PaginationDto } from '../../common/dto/pagination.dto';
@@ -35,9 +35,15 @@ export class BlogsService {
     return { data, total, page, limit, pages: Math.ceil(total / limit) };
   }
 
-  async findOne(id: string) {
-    const post = await this.blogModel.findById(id).exec();
-    if (!post) throw new NotFoundException(`Blog post #${id} not found`);
+  async findOne(idOrSlug: string) {
+    let post;
+    if (Types.ObjectId.isValid(idOrSlug)) {
+      post = await this.blogModel.findById(idOrSlug).exec();
+    } else {
+      post = await this.blogModel.findOne({ slug: idOrSlug }).exec();
+    }
+    
+    if (!post) throw new NotFoundException(`Blog post "${idOrSlug}" not found`);
     return post;
   }
 

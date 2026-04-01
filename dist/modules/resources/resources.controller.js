@@ -61,6 +61,8 @@ __decorate([
 ], ResourcesController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Post)(),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, swagger_1.ApiOperation)({ summary: 'Create a new resource' }),
     openapi.ApiResponse({ status: 201, type: Object }),
     __param(0, (0, common_1.Body)()),
@@ -70,6 +72,8 @@ __decorate([
 ], ResourcesController.prototype, "create", null);
 __decorate([
     (0, common_1.Patch)(':id'),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, swagger_1.ApiOperation)({ summary: 'Update a resource' }),
     openapi.ApiResponse({ status: 200, type: Object }),
     __param(0, (0, common_1.Param)('id')),
@@ -80,6 +84,8 @@ __decorate([
 ], ResourcesController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, swagger_1.ApiOperation)({ summary: 'Delete a resource' }),
     openapi.ApiResponse({ status: 200 }),
     __param(0, (0, common_1.Param)('id')),
@@ -89,9 +95,7 @@ __decorate([
 ], ResourcesController.prototype, "remove", null);
 exports.ResourcesController = ResourcesController = __decorate([
     (0, swagger_1.ApiTags)('Resources'),
-    (0, swagger_1.ApiBearerAuth)(),
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, common_1.Controller)('api/v1/admin/resources'),
+    (0, common_1.Controller)('api/v1/resources'),
     __metadata("design:paramtypes", [resources_service_1.ResourcesService])
 ], ResourcesController);
 //# sourceMappingURL=resources.controller.js.map

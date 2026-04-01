@@ -25,6 +25,7 @@ const products_module_1 = require("./modules/products/products.module");
 const services_module_1 = require("./modules/services/services.module");
 const settings_module_1 = require("./modules/settings/settings.module");
 const bookings_module_1 = require("./modules/bookings/bookings.module");
+const messaging_module_1 = require("./modules/messaging/messaging.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -53,6 +54,7 @@ exports.AppModule = AppModule = __decorate([
             services_module_1.ServicesModule,
             settings_module_1.SettingsModule,
             bookings_module_1.BookingsModule,
+            messaging_module_1.MessagingModule,
         ],
     })
 ], AppModule);
