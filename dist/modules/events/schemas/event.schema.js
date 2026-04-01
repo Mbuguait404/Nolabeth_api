@@ -40,6 +40,7 @@ let MyEvent = class MyEvent {
     features;
     organizer_name;
     organizer_role;
+    organizer_image_url;
     registrations_count;
 };
 exports.MyEvent = MyEvent;
@@ -104,6 +105,10 @@ __decorate([
     __metadata("design:type", String)
 ], MyEvent.prototype, "organizer_role", void 0);
 __decorate([
+    (0, mongoose_1.Prop)({ nullable: true }),
+    __metadata("design:type", String)
+], MyEvent.prototype, "organizer_image_url", void 0);
+__decorate([
     (0, mongoose_1.Prop)({ default: 0 }),
     __metadata("design:type", Number)
 ], MyEvent.prototype, "registrations_count", void 0);
@@ -114,7 +119,7 @@ exports.MyEvent = MyEvent = __decorate([
     })
 ], MyEvent);
 exports.EventSchema = mongoose_1.SchemaFactory.createForClass(MyEvent);
-exports.EventSchema.pre('save', function (next) {
+exports.EventSchema.pre('save', async function () {
     if (this.title && !this.slug) {
         this.slug = this.title
             .toLowerCase()
@@ -123,6 +128,5 @@ exports.EventSchema.pre('save', function (next) {
             .replace(/-+/g, '-')
             .trim();
     }
-    next();
 });
 //# sourceMappingURL=event.schema.js.map

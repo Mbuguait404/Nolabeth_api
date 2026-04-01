@@ -30,8 +30,9 @@ class CreateEventDto {
     features;
     organizer_name;
     organizer_role;
+    organizer_image_url;
     static _OPENAPI_METADATA_FACTORY() {
-        return { title: { required: true, type: () => String }, slug: { required: false, type: () => String }, date: { required: true, type: () => String }, time_range: { required: false, type: () => String }, location: { required: true, type: () => String }, description: { required: true, type: () => String }, long_description: { required: false, type: () => String }, capacity: { required: false, type: () => Number, minimum: 0 }, price_kes: { required: false, type: () => String }, image_url: { required: false, type: () => String }, status: { required: false, enum: require("../entities/event.entity").EventStatus }, category: { required: false, enum: require("../entities/event.entity").EventCategory }, features: { required: false, type: () => [String] }, organizer_name: { required: false, type: () => String }, organizer_role: { required: false, type: () => String } };
+        return { title: { required: true, type: () => String }, slug: { required: false, type: () => String }, date: { required: true, type: () => String }, time_range: { required: false, type: () => String }, location: { required: true, type: () => String }, description: { required: true, type: () => String }, long_description: { required: false, type: () => String }, capacity: { required: false, type: () => Number, minimum: 0 }, price_kes: { required: false, type: () => String }, image_url: { required: false, type: () => String }, status: { required: false, enum: require("../entities/event.entity").EventStatus }, category: { required: false, enum: require("../entities/event.entity").EventCategory }, features: { required: false, type: () => [String] }, organizer_name: { required: false, type: () => String }, organizer_role: { required: false, type: () => String }, organizer_image_url: { required: false, type: () => String } };
     }
 }
 exports.CreateEventDto = CreateEventDto;
@@ -108,6 +109,11 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateEventDto.prototype, "organizer_role", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateEventDto.prototype, "organizer_image_url", void 0);
 class UpdateEventDto extends (0, mapped_types_1.PartialType)(CreateEventDto) {
     static _OPENAPI_METADATA_FACTORY() {
         return {};

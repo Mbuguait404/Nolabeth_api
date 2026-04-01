@@ -66,14 +66,16 @@ export class MyEvent {
   @Prop({ nullable: true })
   organizer_role: string;
 
+  @Prop({ nullable: true })
+  organizer_image_url: string;
+
   @Prop({ default: 0 })
   registrations_count: number;
 }
 
 export const EventSchema = SchemaFactory.createForClass(MyEvent);
 
-// Pre-save hook for slug generation from title
-EventSchema.pre('save', function (this: EventDocument, next: Function) {
+EventSchema.pre('save', async function (this: EventDocument) {
   if (this.title && !this.slug) {
     this.slug = this.title
       .toLowerCase()
@@ -82,5 +84,4 @@ EventSchema.pre('save', function (this: EventDocument, next: Function) {
       .replace(/-+/g, '-')
       .trim();
   }
-  next();
 });

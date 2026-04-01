@@ -27,6 +27,7 @@ export declare class MyEvent {
     features: string[];
     organizer_name: string;
     organizer_role: string;
+    organizer_image_url: string;
     registrations_count: number;
 }
 export declare const EventSchema: import("mongoose").Schema<MyEvent, import("mongoose").Model<MyEvent, any, any, any, (Document<unknown, any, MyEvent, any, import("mongoose").DefaultSchemaOptions> & MyEvent & {
@@ -175,6 +176,15 @@ export declare const EventSchema: import("mongoose").Schema<MyEvent, import("mon
         id: string;
     }> | undefined;
     organizer_role?: import("mongoose").SchemaDefinitionProperty<string, MyEvent, Document<unknown, {}, MyEvent, {
+        id: string;
+    }, import("mongoose").DefaultSchemaOptions> & Omit<MyEvent & {
+        _id: import("mongoose").Types.ObjectId;
+    } & {
+        __v: number;
+    }, "id"> & {
+        id: string;
+    }> | undefined;
+    organizer_image_url?: import("mongoose").SchemaDefinitionProperty<string, MyEvent, Document<unknown, {}, MyEvent, {
         id: string;
     }, import("mongoose").DefaultSchemaOptions> & Omit<MyEvent & {
         _id: import("mongoose").Types.ObjectId;

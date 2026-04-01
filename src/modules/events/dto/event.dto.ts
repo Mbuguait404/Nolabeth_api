@@ -62,6 +62,10 @@ export class CreateEventDto {
   @IsOptional()
   @IsString()
   organizer_role?: string;
+
+  @IsOptional()
+  @IsString()
+  organizer_image_url?: string;
 }
 
 export class UpdateEventDto extends PartialType(CreateEventDto) {}

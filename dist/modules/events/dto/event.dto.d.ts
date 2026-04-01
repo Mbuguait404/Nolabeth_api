@@ -15,6 +15,7 @@ export declare class CreateEventDto {
     features?: string[];
     organizer_name?: string;
     organizer_role?: string;
+    organizer_image_url?: string;
 }
 declare const UpdateEventDto_base: import("@nestjs/mapped-types").MappedType<Partial<CreateEventDto>>;
 export declare class UpdateEventDto extends UpdateEventDto_base {
