@@ -16,6 +16,7 @@ import { ServicesModule } from './modules/services/services.module';
 import { SettingsModule } from './modules/settings/settings.module';
 import { BookingsModule } from './modules/bookings/bookings.module';
 import { MessagingModule } from './modules/messaging/messaging.module';
+import { EventRegistrationsModule } from './modules/event-registrations/event-registrations.module';
 
 // // TODO: Port these entities to Mongoose schemas
 // import { AdminUser } from './auth/entities/admin-user.entity';
@@ -54,6 +55,7 @@ import { MessagingModule } from './modules/messaging/messaging.module';
     SettingsModule,
     BookingsModule,
     MessagingModule,
+    EventRegistrationsModule,
   ],
 })
 export class AppModule {}

@@ -26,6 +26,7 @@ const services_module_1 = require("./modules/services/services.module");
 const settings_module_1 = require("./modules/settings/settings.module");
 const bookings_module_1 = require("./modules/bookings/bookings.module");
 const messaging_module_1 = require("./modules/messaging/messaging.module");
+const event_registrations_module_1 = require("./modules/event-registrations/event-registrations.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -55,6 +56,7 @@ exports.AppModule = AppModule = __decorate([
             settings_module_1.SettingsModule,
             bookings_module_1.BookingsModule,
             messaging_module_1.MessagingModule,
+            event_registrations_module_1.EventRegistrationsModule,
         ],
     })
 ], AppModule);
