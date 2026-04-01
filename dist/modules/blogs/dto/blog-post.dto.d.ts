@@ -10,6 +10,7 @@ export declare class CreateBlogPostDto {
     featured_image_url?: string;
     is_featured?: boolean;
     is_published?: boolean;
+    tags?: string[];
 }
 declare const UpdateBlogPostDto_base: import("@nestjs/mapped-types").MappedType<Partial<CreateBlogPostDto>>;
 export declare class UpdateBlogPostDto extends UpdateBlogPostDto_base {

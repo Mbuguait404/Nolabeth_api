@@ -37,12 +37,15 @@ export class BlogPost {
 
   @Prop({ default: false })
   is_published: boolean;
+
+  @Prop({ type: [String], default: [] })
+  tags: string[];
 }
 
 export const BlogPostSchema = SchemaFactory.createForClass(BlogPost);
 
-// Pre-save hook for slug generation (if needed via mongoose directly)
-BlogPostSchema.pre('save', function (this: BlogPostDocument, next: Function) {
+// Pre-save hook for slug generation
+BlogPostSchema.pre('save', async function (this: BlogPostDocument) {
   if (this.title && !this.slug) {
     this.slug = this.title
       .toLowerCase()
@@ -51,6 +54,5 @@ BlogPostSchema.pre('save', function (this: BlogPostDocument, next: Function) {
       .replace(/-+/g, '-')
       .trim();
   }
-  next();
 });
 

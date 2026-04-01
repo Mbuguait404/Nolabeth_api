@@ -44,6 +44,10 @@ export class CreateBlogPostDto {
   @IsOptional()
   @IsBoolean()
   is_published?: boolean;
+
+  @IsOptional()
+  @IsString({ each: true })
+  tags?: string[];
 }
 
 export class UpdateBlogPostDto extends PartialType(CreateBlogPostDto) {}

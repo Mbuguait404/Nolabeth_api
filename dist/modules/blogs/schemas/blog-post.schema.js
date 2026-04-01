@@ -23,6 +23,7 @@ let BlogPost = class BlogPost {
     featured_image_url;
     is_featured;
     is_published;
+    tags;
 };
 exports.BlogPost = BlogPost;
 __decorate([
@@ -69,11 +70,15 @@ __decorate([
     (0, mongoose_1.Prop)({ default: false }),
     __metadata("design:type", Boolean)
 ], BlogPost.prototype, "is_published", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: [String], default: [] }),
+    __metadata("design:type", Array)
+], BlogPost.prototype, "tags", void 0);
 exports.BlogPost = BlogPost = __decorate([
     (0, mongoose_1.Schema)({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } })
 ], BlogPost);
 exports.BlogPostSchema = mongoose_1.SchemaFactory.createForClass(BlogPost);
-exports.BlogPostSchema.pre('save', function (next) {
+exports.BlogPostSchema.pre('save', async function () {
     if (this.title && !this.slug) {
         this.slug = this.title
             .toLowerCase()
@@ -82,6 +87,5 @@ exports.BlogPostSchema.pre('save', function (next) {
             .replace(/-+/g, '-')
             .trim();
     }
-    next();
 });
 //# sourceMappingURL=blog-post.schema.js.map

@@ -12,6 +12,7 @@ export declare class BlogPost {
     featured_image_url: string;
     is_featured: boolean;
     is_published: boolean;
+    tags: string[];
 }
 export declare const BlogPostSchema: import("mongoose").Schema<BlogPost, import("mongoose").Model<BlogPost, any, any, any, (Document<unknown, any, BlogPost, any, import("mongoose").DefaultSchemaOptions> & BlogPost & {
     _id: import("mongoose").Types.ObjectId;
@@ -123,6 +124,15 @@ export declare const BlogPostSchema: import("mongoose").Schema<BlogPost, import(
         id: string;
     }> | undefined;
     is_published?: import("mongoose").SchemaDefinitionProperty<boolean, BlogPost, Document<unknown, {}, BlogPost, {
+        id: string;
+    }, import("mongoose").DefaultSchemaOptions> & Omit<BlogPost & {
+        _id: import("mongoose").Types.ObjectId;
+    } & {
+        __v: number;
+    }, "id"> & {
+        id: string;
+    }> | undefined;
+    tags?: import("mongoose").SchemaDefinitionProperty<string[], BlogPost, Document<unknown, {}, BlogPost, {
         id: string;
     }, import("mongoose").DefaultSchemaOptions> & Omit<BlogPost & {
         _id: import("mongoose").Types.ObjectId;

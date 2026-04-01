@@ -25,8 +25,9 @@ class CreateBlogPostDto {
     featured_image_url;
     is_featured;
     is_published;
+    tags;
     static _OPENAPI_METADATA_FACTORY() {
-        return { title: { required: true, type: () => String }, slug: { required: false, type: () => String }, author_name: { required: true, type: () => String }, published_date: { required: false, type: () => String }, read_time: { required: false, type: () => String }, category: { required: false, type: () => String }, excerpt: { required: false, type: () => String }, content_rich_text: { required: true, type: () => String }, featured_image_url: { required: false, type: () => String }, is_featured: { required: false, type: () => Boolean }, is_published: { required: false, type: () => Boolean } };
+        return { title: { required: true, type: () => String }, slug: { required: false, type: () => String }, author_name: { required: true, type: () => String }, published_date: { required: false, type: () => String }, read_time: { required: false, type: () => String }, category: { required: false, type: () => String }, excerpt: { required: false, type: () => String }, content_rich_text: { required: true, type: () => String }, featured_image_url: { required: false, type: () => String }, is_featured: { required: false, type: () => Boolean }, is_published: { required: false, type: () => Boolean }, tags: { required: false, type: () => [String] } };
     }
 }
 exports.CreateBlogPostDto = CreateBlogPostDto;
@@ -82,6 +83,11 @@ __decorate([
     (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
 ], CreateBlogPostDto.prototype, "is_published", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)({ each: true }),
+    __metadata("design:type", Array)
+], CreateBlogPostDto.prototype, "tags", void 0);
 class UpdateBlogPostDto extends (0, mapped_types_1.PartialType)(CreateBlogPostDto) {
     static _OPENAPI_METADATA_FACTORY() {
         return {};
