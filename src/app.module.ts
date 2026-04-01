@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { ScheduleModule } from '@nestjs/schedule';
 
 import configuration from './config/configuration';
 
@@ -17,6 +18,7 @@ import { SettingsModule } from './modules/settings/settings.module';
 import { BookingsModule } from './modules/bookings/bookings.module';
 import { MessagingModule } from './modules/messaging/messaging.module';
 import { EventRegistrationsModule } from './modules/event-registrations/event-registrations.module';
+import { KeepAliveService } from './common/services/keep-alive.service';
 
 // // TODO: Port these entities to Mongoose schemas
 // import { AdminUser } from './auth/entities/admin-user.entity';
@@ -33,6 +35,7 @@ import { EventRegistrationsModule } from './modules/event-registrations/event-re
       isGlobal: true,
       load: [configuration],
     }),
+    ScheduleModule.forRoot(),
 
     ThrottlerModule.forRoot([{ ttl: 60000, limit: 20 }]),
 
@@ -57,5 +60,6 @@ import { EventRegistrationsModule } from './modules/event-registrations/event-re
     MessagingModule,
     EventRegistrationsModule,
   ],
+  providers: [KeepAliveService],
 })
 export class AppModule {}
