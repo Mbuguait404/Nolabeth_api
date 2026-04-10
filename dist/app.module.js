@@ -32,6 +32,8 @@ const media_module_1 = require("./modules/media/media.module");
 const keep_alive_service_1 = require("./common/services/keep-alive.service");
 const cloudinary_module_1 = require("./cloudinary/cloudinary.module");
 const orders_module_1 = require("./modules/orders/orders.module");
+const app_controller_1 = require("./app.controller");
+const app_service_1 = require("./app.service");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -67,7 +69,8 @@ exports.AppModule = AppModule = __decorate([
             cloudinary_module_1.CloudinaryModule,
             orders_module_1.OrdersModule,
         ],
-        providers: [keep_alive_service_1.KeepAliveService],
+        controllers: [app_controller_1.AppController],
+        providers: [app_service_1.AppService, keep_alive_service_1.KeepAliveService],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

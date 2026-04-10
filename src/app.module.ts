@@ -22,6 +22,8 @@ import { MediaModule } from './modules/media/media.module';
 import { KeepAliveService } from './common/services/keep-alive.service';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { OrdersModule } from './modules/orders/orders.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -57,6 +59,7 @@ import { OrdersModule } from './modules/orders/orders.module';
     CloudinaryModule,
     OrdersModule,
   ],
-  providers: [KeepAliveService],
+  controllers: [AppController],
+  providers: [AppService, KeepAliveService],
 })
 export class AppModule {}
