@@ -96,7 +96,7 @@ exports.Product = Product = __decorate([
     (0, mongoose_1.Schema)({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } })
 ], Product);
 exports.ProductSchema = mongoose_1.SchemaFactory.createForClass(Product);
-exports.ProductSchema.pre('save', function (next) {
+exports.ProductSchema.pre('save', async function () {
     if (this.name && !this.slug) {
         this.slug = this.name
             .toLowerCase()
@@ -105,6 +105,5 @@ exports.ProductSchema.pre('save', function (next) {
             .replace(/-+/g, '-')
             .trim();
     }
-    next();
 });
 //# sourceMappingURL=product.schema.js.map

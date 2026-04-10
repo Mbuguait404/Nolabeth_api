@@ -61,7 +61,7 @@ export class Product {
 export const ProductSchema = SchemaFactory.createForClass(Product);
 
 // Pre-save hook for slug generation from name
-ProductSchema.pre('save', function (this: ProductDocument, next: Function) {
+ProductSchema.pre('save', async function (this: ProductDocument) {
   if (this.name && !this.slug) {
     this.slug = this.name
       .toLowerCase()
@@ -70,5 +70,4 @@ ProductSchema.pre('save', function (this: ProductDocument, next: Function) {
       .replace(/-+/g, '-')
       .trim();
   }
-  next();
 });
