@@ -18,6 +18,7 @@ import { SettingsModule } from './modules/settings/settings.module';
 import { BookingsModule } from './modules/bookings/bookings.module';
 import { MessagingModule } from './modules/messaging/messaging.module';
 import { EventRegistrationsModule } from './modules/event-registrations/event-registrations.module';
+import { MediaModule } from './modules/media/media.module';
 import { KeepAliveService } from './common/services/keep-alive.service';
 
 // // TODO: Port these entities to Mongoose schemas
@@ -59,6 +60,7 @@ import { KeepAliveService } from './common/services/keep-alive.service';
     BookingsModule,
     MessagingModule,
     EventRegistrationsModule,
+    MediaModule,
   ],
   providers: [KeepAliveService],
 })

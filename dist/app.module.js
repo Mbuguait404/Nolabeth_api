@@ -14,6 +14,7 @@ const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const mongoose_1 = require("@nestjs/mongoose");
 const throttler_1 = require("@nestjs/throttler");
+const schedule_1 = require("@nestjs/schedule");
 const configuration_1 = __importDefault(require("./config/configuration"));
 const auth_module_1 = require("./auth/auth.module");
 const admin_module_1 = require("./admin/admin.module");
@@ -27,6 +28,8 @@ const settings_module_1 = require("./modules/settings/settings.module");
 const bookings_module_1 = require("./modules/bookings/bookings.module");
 const messaging_module_1 = require("./modules/messaging/messaging.module");
 const event_registrations_module_1 = require("./modules/event-registrations/event-registrations.module");
+const media_module_1 = require("./modules/media/media.module");
+const keep_alive_service_1 = require("./common/services/keep-alive.service");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -37,6 +40,7 @@ exports.AppModule = AppModule = __decorate([
                 isGlobal: true,
                 load: [configuration_1.default],
             }),
+            schedule_1.ScheduleModule.forRoot(),
             throttler_1.ThrottlerModule.forRoot([{ ttl: 60000, limit: 20 }]),
             mongoose_1.MongooseModule.forRootAsync({
                 imports: [config_1.ConfigModule],
@@ -57,7 +61,9 @@ exports.AppModule = AppModule = __decorate([
             bookings_module_1.BookingsModule,
             messaging_module_1.MessagingModule,
             event_registrations_module_1.EventRegistrationsModule,
+            media_module_1.MediaModule,
         ],
+        providers: [keep_alive_service_1.KeepAliveService],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map
