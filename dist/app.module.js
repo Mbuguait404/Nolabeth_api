@@ -30,6 +30,7 @@ const messaging_module_1 = require("./modules/messaging/messaging.module");
 const event_registrations_module_1 = require("./modules/event-registrations/event-registrations.module");
 const media_module_1 = require("./modules/media/media.module");
 const keep_alive_service_1 = require("./common/services/keep-alive.service");
+const cloudinary_module_1 = require("./cloudinary/cloudinary.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -62,6 +63,7 @@ exports.AppModule = AppModule = __decorate([
             messaging_module_1.MessagingModule,
             event_registrations_module_1.EventRegistrationsModule,
             media_module_1.MediaModule,
+            cloudinary_module_1.CloudinaryModule,
         ],
         providers: [keep_alive_service_1.KeepAliveService],
     })
