@@ -21,15 +21,7 @@ import { EventRegistrationsModule } from './modules/event-registrations/event-re
 import { MediaModule } from './modules/media/media.module';
 import { KeepAliveService } from './common/services/keep-alive.service';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
-
-// // TODO: Port these entities to Mongoose schemas
-// import { AdminUser } from './auth/entities/admin-user.entity';
-// import { Event } from './modules/events/entities/event.entity';
-// import { Client } from './modules/clients/entities/client.entity';
-// import { BlogPost } from './modules/blogs/entities/blog-post.entity';
-// import { Resource } from './modules/resources/entities/resource.entity';
-// import { Product } from './modules/products/entities/product.entity';
-// import { TherapyService } from './modules/services/entities/therapy-service.entity';
+import { OrdersModule } from './modules/orders/orders.module';
 
 @Module({
   imports: [
@@ -63,6 +55,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
     EventRegistrationsModule,
     MediaModule,
     CloudinaryModule,
+    OrdersModule,
   ],
   providers: [KeepAliveService],
 })
