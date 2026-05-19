@@ -14,10 +14,10 @@ export class Settings {
   @Prop({ default: 'Noble Lazuli And Beyond Therapy. Empowering your journey through compassionate, evidence-based counseling and holistic wellness.' })
   site_description: string;
 
-  @Prop({ default: 'lapislazulifirmfoundations@gmail.com' })
+  @Prop({ default: 'nolabeththerapy@gmail.com' })
   contact_email: string;
 
-  @Prop({ default: '+254 723 298 339' })
+  @Prop({ default: '+254 723 298 339, +254 722 682 992' })
   contact_phone: string;
 
   @Prop({ default: 'Mombasa - Kizingo' })
