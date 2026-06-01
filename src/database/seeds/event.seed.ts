@@ -33,8 +33,8 @@ export const upcomingEvents = [
     slug: 'stress-management-workshop',
     date: 'March 25, 2026',
     time_range: '10:00 AM - 2:00 PM',
-    location: 'NOLABETH Wellness Center, Mombasa',
-    description: 'Learn practical techniques to manage stress and build resilience in this interactive half-day workshop.',
+    location: 'NOLABETH Therapy & Wellness, Mombasa',
+    description: 'Learn practical techniques to manage stress and build resilience in this interactive half-day workshop.'
     long_description: 'Our Stress Management Workshop is designed to provide you with a comprehensive toolkit for handling the pressures of modern life. In this intensive four-hour session, we dive deep into the physiological and psychological aspects of stress.',
     capacity: 12,
     price_kes: 'KES 2,500',
@@ -79,8 +79,8 @@ export const upcomingEvents = [
     slug: 'teen-mental-health-awareness',
     date: 'April 15, 2026',
     time_range: '9:00 AM - 1:00 PM',
-    location: 'NOLABETH Wellness Center, Mombasa',
-    description: 'A special workshop for parents and educators on supporting teen mental health.',
+    location: 'NOLABETH Therapy & Wellness, Mombasa',
+    description: 'A special workshop for parents and educators on supporting teen mental health.'
     long_description: 'The teenage years are a critical period for mental health development. This workshop provides parents, guardians, and educators with the insights and tools needed to support adolescents effectively.',
     capacity: 15,
     price_kes: 'KES 2,000',

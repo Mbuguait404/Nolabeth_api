@@ -20,7 +20,7 @@ export class Settings {
   @Prop({ default: '+254 723 298 339, +254 722 682 992' })
   contact_phone: string;
 
-  @Prop({ default: 'Mombasa - Kizingo' })
+  @Prop({ default: 'South Park, Kizingo, Marsabit Road, Mombasa, Kenya' })
   contact_address: string;
 
   @Prop({ type: Object, default: {
